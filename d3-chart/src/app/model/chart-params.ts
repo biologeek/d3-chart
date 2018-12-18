@@ -4,6 +4,7 @@ export class ChartConfiguration {
     dimensions: Dimensions;
     data: Series;
     xAxis: Axis;
+    yAxes: Axis[];
 
 }
 

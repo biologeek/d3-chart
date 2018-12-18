@@ -11,16 +11,6 @@ import { ChartConfiguration } from '../model/chart-params';
 export class ChartComponent implements OnInit {
 
 
-  @ViewChild('chart')
-  chartRef: ElementRef;
-  private chart: any;
-
-  @ViewChild('app-x-axis')
-  private xAxis: ElementRef;
-
-
-
-
   /**
    * margins are in px.
    * Format : [left, right, top, bottom]
@@ -32,7 +22,7 @@ export class ChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    d3Selection.select(this.chartRef.nativeElement)
+    d3Selection.select('#chart')
       .attr('transform', `translate(${this.chartConfiguration.margins.left},
         ${this.chartConfiguration.margins.right})`)
       .attr('width', this.chartConfiguration.dimensions.width -

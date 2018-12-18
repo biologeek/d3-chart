@@ -8,7 +8,7 @@ import * as d3TimeFormat from 'd3-time-format';
 import { ChartConfiguration } from '../model/chart-params';
 
 @Component({
-  selector: 'app-x-axis',
+  selector: 'g[app-x-axis]',
   templateUrl: './x-axis.component.html',
   styleUrls: ['./x-axis.component.css']
 })
@@ -30,7 +30,7 @@ export class XAxisComponent implements OnInit {
       this.generateAxis();
   }
   generateAxis() {
-    d3Selection.select('.x-axis')
+    d3Selection.select('app-x-axis')
       .attr('transform', `translate(0, ${this.chartConfiguration.dimensions.height
          - this.chartConfiguration.margins.top})`)
       .attr('stroke-width', 2)
@@ -39,6 +39,7 @@ export class XAxisComponent implements OnInit {
           .ticks(10)
           .tickFormat(d3TimeFormat.timeFormat('%d/%m/%Y %H:%M'))
       ).selectAll('text')
+      .attr('fill', 'black')
       .attr('transform', 'rotate(-45)')
       .attr('font-size', '0.9rem')
       .attr('dx', '-4rem')
