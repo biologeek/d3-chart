@@ -1,9 +1,15 @@
 export class ChartConfiguration {
 
     margins: Margins;
+    dimensions: Dimensions;
     data: Series;
     xAxis: Axis;
 
+}
+
+export class Dimensions {
+    height: number;
+    width: number;
 }
 
 export class Axis {
@@ -16,10 +22,18 @@ export class Axis {
 export class Series {
     headers: SeriesHeaders;
     values: SeriesValues;
+    x: MinMaxValues;
+    y: Array<MinMaxValues>;
+}
+
+
+export class MinMaxValues {
+    min: number;
+    max: number;
 }
 
 export class SeriesValues {
-    
+
 }
 
 export class SeriesHeaders {

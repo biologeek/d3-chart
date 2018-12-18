@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
+import { ChartConfiguration } from '../model/chart-params';
 
 @Component({
   selector: 'app-chart',
@@ -10,7 +11,7 @@ import * as d3Selection from 'd3-selection';
 export class ChartComponent implements OnInit {
 
 
-  @ViewChild('.chart')
+  @ViewChild('chart')
   chartRef: ElementRef;
   private chart: any;
 
@@ -25,21 +26,25 @@ export class ChartComponent implements OnInit {
    * Format : [left, right, top, bottom]
    */
   @Input()
-  margins: number[] = [10, 10, 10, 10];
-
-  @Input()
-  width = 250;
-  @Input()
-  height = 250;
+  chartConfiguration: ChartConfiguration;
 
 
   constructor() { }
 
   ngOnInit() {
     d3Selection.select(this.chartRef.nativeElement)
-      .attr('transform', `translate(${this.margins[0]}, ${this.margins[2]})`)
-      .attr('width', this.width - this.margins[0] - this.margins[1])
-      .attr('height', this.height - this.margins[2] - this.margins[3]);
+      .attr('transform', `translate(${this.chartConfiguration.margins.left},
+        ${this.chartConfiguration.margins.right})`)
+      .attr('width', this.chartConfiguration.dimensions.width -
+        this.chartConfiguration.margins.left - this.chartConfiguration.margins.right)
+      .attr('height', this.chartConfiguration.dimensions.height -
+        this.chartConfiguration.margins.top - this.chartConfiguration.margins.bottom)
+      .append('rect')
+      .attr('fill', 'white')
+      .attr('width', this.chartConfiguration.dimensions.width -
+        this.chartConfiguration.margins.left - this.chartConfiguration.margins.right)
+      .attr('height', this.chartConfiguration.dimensions.height -
+        this.chartConfiguration.margins.top - this.chartConfiguration.margins.bottom);
 
   }
 
