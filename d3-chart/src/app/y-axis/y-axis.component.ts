@@ -31,8 +31,7 @@ export class YAxisComponent implements OnInit {
       .scaleLinear()
       .range([this.chartConfiguration.dimensions.height - this.chartConfiguration.margins.top, this.chartConfiguration.margins.bottom])
       .domain([currentAxis.min, currentAxis.max]);
-
-    d3Selection.select(`#y-axis-${this.axisNumber}`)
+    d3Selection.select(`.y-axis`)
       .attr('transform', 'translate(' + (this.chartConfiguration.margins.left - this.axisNumber * 50) + ', 0)')
       .attr('stroke-width', 2)
       .call(d3Axis.axisLeft(this.y))

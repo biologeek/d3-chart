@@ -12,7 +12,7 @@ export class AppComponent {
   chartConfig: ChartConfiguration = {
     dimensions: {
       height: 250,
-      width: 250
+      width: 500
     },
     xAxis: {
       id: 1,
@@ -34,6 +34,17 @@ export class AppComponent {
       right: 10,
       top: 10,
       bottom: 10
-    }
-  }
+    },
+    yAxes: [{
+      id: 1,
+      label: 'Axe 1',
+      max: 50,
+      min: 0
+    },{
+      id: 2,
+      label: 'Axe 2',
+      max: 100,
+      min: 0
+    }]
+  };
 }

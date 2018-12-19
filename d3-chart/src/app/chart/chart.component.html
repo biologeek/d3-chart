@@ -1,11 +1,10 @@
 <svg [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration.dimensions.width">
   <svg:g id="chart">
-  </svg:g>
-  <svg:g app-x-axis [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration.dimensions.width"
-    [chartConfiguration]="chartConfiguration">
-  </svg:g>
-  <svg:g *ngFor="let axis of chartConfiguration.yAxes" app-y-axis class="chart" [attr.height.px]="chartConfiguration.dimensions.height"
-    [attr.width.px]="chartConfiguration.dimensions.width" [chartConfiguration]="chartConfiguration">
-    
+    <svg:g app-x-axis [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration.dimensions.width"
+      [chartConfiguration]="chartConfiguration">
+    </svg:g>
+    <svg:g *ngFor="let axis of chartConfiguration.yAxes; let i = index" app-y-axis class="chart" [axisNumber]="i" [attr.height.px]="chartConfiguration.dimensions.height"
+      [attr.width.px]="chartConfiguration.dimensions.width" [chartConfiguration]="chartConfiguration">
+    </svg:g>
   </svg:g>
 </svg>
