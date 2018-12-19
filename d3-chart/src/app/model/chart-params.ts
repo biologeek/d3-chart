@@ -1,9 +1,23 @@
 export class ChartConfiguration {
-
+    /**
+     * Margins between border of SVG element and chart, axis or whatever
+     */
     margins: Margins;
+    /**
+     * Dimensions of SVG element
+     */
     dimensions: Dimensions;
+    /**
+     * Series of data
+     */
     data: Series;
+    /**
+     * Bottom axis configuration
+     */
     xAxis: Axis;
+    /**
+     * Vertical Y axes list
+     */
     yAxes: Axis[];
 
 }

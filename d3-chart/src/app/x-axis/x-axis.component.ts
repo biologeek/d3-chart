@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
@@ -12,7 +12,7 @@ import { ChartConfiguration } from '../model/chart-params';
   templateUrl: './x-axis.component.html',
   styleUrls: ['./x-axis.component.css']
 })
-export class XAxisComponent implements OnInit {
+export class XAxisComponent implements AfterViewInit {
 
   @Input()
   chartConfiguration: ChartConfiguration;
@@ -21,9 +21,10 @@ export class XAxisComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.x = d3Scale.scaleTime()
-      .range([this.chartConfiguration.margins.left, this.chartConfiguration.dimensions.width - this.chartConfiguration.margins.right])
+      .range([this.chartConfiguration.margins.left,
+        this.chartConfiguration.dimensions.width - this.chartConfiguration.margins.right - this.chartConfiguration.margins.left])
       .domain(
         d3Array.extent([this.chartConfiguration.data.x.min, this.chartConfiguration.data.x.max])
       );
@@ -32,7 +33,7 @@ export class XAxisComponent implements OnInit {
   generateAxis() {
     d3Selection.select('[app-x-axis]')
       .attr('transform', `translate(0, ${this.chartConfiguration.dimensions.height
-        - this.chartConfiguration.margins.top})`)
+        - this.chartConfiguration.margins.bottom})`)
       .attr('stroke-width', 2)
       .call(
         d3Axis.axisBottom(this.x)
@@ -42,8 +43,8 @@ export class XAxisComponent implements OnInit {
       .attr('fill', 'black')
       .attr('transform', 'rotate(-45)')
       .attr('font-size', '0.9rem')
-      .attr('dx', '-4rem')
-      .attr('dy', '0.5rem');
+      .attr('dx', '-1.5rem')
+      .attr('dy', '0.7rem');
   }
 
 }
