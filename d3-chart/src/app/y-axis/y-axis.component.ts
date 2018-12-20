@@ -32,6 +32,7 @@ export class YAxisComponent implements AfterViewInit {
       .range([this.chartConfiguration.dimensions.height - this.chartConfiguration.margins.bottom
         , this.chartConfiguration.margins.bottom])
       .domain([currentAxis.min, currentAxis.max]);
+
     d3Selection.select(`g#y-axis-${this.axisNumber}`)
       .attr('transform', 'translate('
         + (this.chartConfiguration.margins.left - this.axisNumber * 50)

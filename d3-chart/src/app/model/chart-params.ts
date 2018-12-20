@@ -32,6 +32,7 @@ export class Axis {
     label: string;
     min: number;
     max: number;
+    function: any;
 }
 
 export class Series {
@@ -41,17 +42,31 @@ export class Series {
     y: Array<MinMaxValues>;
 }
 
+export class Serie {
+    header: SerieHeader;
+    values: SerieValues;
+    y: Axis;
+    x: Axis;
+}
+
 
 export class MinMaxValues {
     min: number;
     max: number;
 }
 
-export class SeriesValues {
+export class SeriesValues extends Array<SerieValues> {}
 
+export class SerieValues extends Array<SerieValue> {}
+
+export class SerieValue {
+    x: number;
+    y: number;
+}
+export class SeriesHeaders extends Array<SerieHeader> {
 }
 
-export class SeriesHeaders {
+export class SerieHeader {
     id: number;
     axis: number;
     color: string;
