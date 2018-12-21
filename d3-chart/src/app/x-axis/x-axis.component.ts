@@ -6,6 +6,8 @@ import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
 import * as d3TimeFormat from 'd3-time-format';
 import { ChartConfiguration } from '../model/chart-params';
+import { EventsService, MessageType } from '../services/events.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'g[app-x-axis]',
@@ -19,18 +21,23 @@ export class XAxisComponent implements AfterViewInit {
 
   x: any;
 
-  constructor() { }
+  constructor(private eventService: EventsService) { }
 
   ngAfterViewInit() {
+    this.buildAxis();
+  }
+
+  buildAxis() {
     this.x = d3Scale.scaleTime()
       .range([this.chartConfiguration.margins.left,
-        this.chartConfiguration.dimensions.width - this.chartConfiguration.margins.right - this.chartConfiguration.margins.left])
+      this.chartConfiguration.dimensions.width - this.chartConfiguration.margins.right - this.chartConfiguration.margins.left])
       .domain(
         d3Array.extent([this.chartConfiguration.data.x.min, this.chartConfiguration.data.x.max])
       );
-      this.chartConfiguration.xAxis.function = this.x;
+    this.chartConfiguration.xAxis.function = this.x;
     this.generateAxis();
   }
+
   generateAxis() {
     d3Selection.select('[app-x-axis]')
       .attr('transform', `translate(0, ${this.chartConfiguration.dimensions.height
@@ -38,8 +45,8 @@ export class XAxisComponent implements AfterViewInit {
       .attr('stroke-width', 2)
       .call(
         d3Axis.axisBottom(this.x)
-          /*.ticks(10)
-          .tickFormat(d3TimeFormat.timeFormat('%d/%m/%Y %H:%M'))*/
+        /*.ticks(10)
+        .tickFormat(d3TimeFormat.timeFormat('%d/%m/%Y %H:%M'))*/
       ).selectAll('text')
       .attr('fill', 'black')
       .attr('transform', 'rotate(-45)')

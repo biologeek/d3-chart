@@ -1,17 +1,19 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, OnDestroy } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
 import { ChartConfiguration } from '../model/chart-params';
+import { EventsService, MessageType } from '../services/events.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'g[app-y-axis]',
   templateUrl: './y-axis.component.html',
   styleUrls: ['./y-axis.component.css']
 })
-export class YAxisComponent implements AfterViewInit {
+export class YAxisComponent implements AfterViewInit, OnDestroy {
 
   @Input()
   chartConfiguration: ChartConfiguration;
@@ -21,10 +23,20 @@ export class YAxisComponent implements AfterViewInit {
 
   y: any;
 
-  constructor() { }
+  sub: Subscription;
+
+  constructor(private eventsService: EventsService) { }
 
   ngAfterViewInit() {
+    this.updateAxis();
+/*
+    this.sub = this.eventsService.subscribe((config: ChartConfiguration) => {
+      this.chartConfiguration = config;
+      this.updateAxis();
+    }, MessageType.DATA_UPDATE);*/
+  }
 
+  updateAxis() {
     const currentAxis = this.chartConfiguration.yAxes[this.axisNumber];
 
     this.y = d3Scale
@@ -32,6 +44,8 @@ export class YAxisComponent implements AfterViewInit {
       .range([this.chartConfiguration.dimensions.height - this.chartConfiguration.margins.bottom
         , this.chartConfiguration.margins.bottom])
       .domain([currentAxis.min, currentAxis.max]);
+
+    currentAxis.function = this.y;
 
     d3Selection.select(`g#y-axis-${this.axisNumber}`)
       .attr('transform', 'translate('
@@ -47,11 +61,15 @@ export class YAxisComponent implements AfterViewInit {
       .attr('fill', '#000')
       .attr('font-size', '1rem')
       .text(currentAxis.label);
+    // this.eventsService.broadcast(MessageType.Y_AXIS_CREATE, this.chartConfiguration);
   }
 
-
-  assignAxis(){
+  assignAxis() {
     this.chartConfiguration.yAxes[this.axisNumber].function = this.y;
+  }
+
+  ngOnDestroy() {
+   // this.sub.unsubscribe();
   }
 
 }

@@ -17,18 +17,14 @@ export class ChartComponent implements OnInit {
    */
   @Input()
   chartConfiguration: ChartConfiguration;
-  serie: Serie;
+  serie: number;
 
 
   constructor() { }
 
   ngOnInit() {
 
-    this.serie = new Serie();
-    this.serie.header = this.chartConfiguration.data.headers[0];
-    this.serie.values = this.chartConfiguration.data.values[0];
-    this.serie.x = this.chartConfiguration.xAxis;
-    this.serie.y = this.chartConfiguration.yAxes[0];
+    this.serie = 0;
     
     d3Selection.select('#chart')
       .attr('transform', `translate(${this.chartConfiguration.margins.left},
@@ -36,14 +32,7 @@ export class ChartComponent implements OnInit {
       .attr('width', this.chartConfiguration.dimensions.width -
         this.chartConfiguration.margins.left - this.chartConfiguration.margins.right)
       .attr('height', this.chartConfiguration.dimensions.height -
-        this.chartConfiguration.margins.top - this.chartConfiguration.margins.bottom)
-      /*.append('rect')
-      .attr('fill', 'white')
-      .attr('width', this.chartConfiguration.dimensions.width -
-        this.chartConfiguration.margins.left - this.chartConfiguration.margins.right)
-      .attr('height', this.chartConfiguration.dimensions.height -
-        this.chartConfiguration.margins.top - this.chartConfiguration.margins.bottom)*/;
-
+        this.chartConfiguration.margins.top - this.chartConfiguration.margins.bottom);
   }
 
 }

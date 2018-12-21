@@ -8,10 +8,6 @@ export class ChartConfiguration {
      */
     dimensions: Dimensions;
     /**
-     * Series of data
-     */
-    data: Series;
-    /**
      * Bottom axis configuration
      */
     xAxis: Axis;
@@ -32,7 +28,7 @@ export class Axis {
     label: string;
     min: number;
     max: number;
-    function?: any;
+    function?: Function;
 }
 
 export class Series {

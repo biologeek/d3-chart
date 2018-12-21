@@ -1,42 +1,58 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, OnChanges } from '@angular/core';
 
 import * as d3Shape from 'd3-shape';
 import * as d3Selection from 'd3-selection';
 import { ChartConfiguration, Series, Serie } from '../model/chart-params';
+import { EventsService, MessageType } from '../services/events.service';
+import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { ChartState } from '../ngrx/reducers/chart.reducer';
 
 @Component({
   selector: 'g[app-curve]',
-  template: `<svg:path id="path-{{serie.header.id}}" class="line"></svg:path>
-  `,
+  template: `<svg:path id="path-{{serie}}" class="line"></svg:path>`,
   styleUrls: ['./curve.component.css']
 })
-export class CurveComponent implements OnInit {
+export class CurveComponent implements AfterViewInit, OnChanges {
 
-  @Input()
   chartConfig: ChartConfiguration;
+  data: Series;
   @Input()
-  serie: Serie;
+  serie: number;
 
   line: any;
 
-  constructor() { }
+  constructor(private store: Store<ChartState>) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.defineLine();
     this.drawLine();
-    console.log(this.chartConfig.xAxis.function);
+  }
+
+  ngOnChanges() {
+    this.defineLine();
+    this.drawLine();
   }
 
   defineLine() {
-    this.line = d3Shape.line()//
-      .x(d => this.serie.x.function(d))//
-      .y(d => this.serie.y.function(d));
+    console.log(this.chartConfig);
+    if (this.chartConfig.xAxis.function && this.chartConfig.yAxes[this.serie].function) {
+      this.line = d3Shape.line()//
+        .x(d => {
+          console.log(this.chartConfig.xAxis);
+          this.chartConfig.xAxis.function(d.x);
+        })//
+        .y(d => this.chartConfig.yAxes[this.serie].function(d.y));
+    }
   }
 
   drawLine() {
-    d3Selection.select(`#path-${this.serie.header.id}`)
-      .attr('clip-path', 'url(#clip)')
-      .attr('stroke', this.serie.header.color)
-      .attr('d', this.line(this.serie.values));
+    if (this.line) {
+      d3Selection.select(`#path-${this.data.headers[this.serie].id}`)
+        // .attr('clip-path', 'url(#clip)')
+        .attr('fill', 'none')
+        .attr('stroke', this.data.headers[this.serie].color)
+        .attr('d', this.line(this.data.values[this.serie]));
+    }
   }
 }
