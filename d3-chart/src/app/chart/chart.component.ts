@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
-import { ChartConfiguration } from '../model/chart-params';
+import { ChartConfiguration, Serie } from '../model/chart-params';
 
 @Component({
   selector: 'app-chart',
@@ -17,11 +17,19 @@ export class ChartComponent implements OnInit {
    */
   @Input()
   chartConfiguration: ChartConfiguration;
+  serie: Serie;
 
 
   constructor() { }
 
   ngOnInit() {
+
+    this.serie = new Serie();
+    this.serie.header = this.chartConfiguration.data.headers[0];
+    this.serie.values = this.chartConfiguration.data.values[0];
+    this.serie.x = this.chartConfiguration.xAxis;
+    this.serie.y = this.chartConfiguration.yAxes[0];
+    
     d3Selection.select('#chart')
       .attr('transform', `translate(${this.chartConfiguration.margins.left},
         ${this.chartConfiguration.margins.right})`)

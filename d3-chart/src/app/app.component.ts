@@ -25,8 +25,30 @@ export class AppComponent {
         min: 0,
         max: 100
       },
-      headers: null,
-      values: null,
+      headers: [
+        {
+          axis: 0,
+          id: 0,
+          color: 'green'
+        }
+      ],
+      values: [
+        [
+          {
+            x: 0.5,
+            y: 10
+          },{
+            x: 0.6,
+            y: 10
+          },{
+            x: 0.7,
+            y: 10
+          },{
+            x: 0.8,
+            y: 10
+          }
+        ]
+      ],
       y: null
     },
     margins: {

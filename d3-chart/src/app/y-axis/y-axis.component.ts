@@ -49,4 +49,9 @@ export class YAxisComponent implements AfterViewInit {
       .text(currentAxis.label);
   }
 
+
+  assignAxis(){
+    this.chartConfiguration.yAxes[this.axisNumber].function = this.y;
+  }
+
 }

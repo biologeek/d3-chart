@@ -1,10 +1,14 @@
 <svg [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration.dimensions.width">
-  <svg:g id="chart">
-    <svg:g app-x-axis [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration.dimensions.width"
+  <g id="chart">
+    <g app-x-axis [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration.dimensions.width"
       [chartConfiguration]="chartConfiguration">
-    </svg:g>
-    <svg:g *ngFor="let axis of chartConfiguration.yAxes; let i = index" app-y-axis [axisNumber]="i" [attr.height.px]="chartConfiguration.dimensions.height"
+    </g>
+    <g *ngFor="let axis of chartConfiguration.yAxes; let i = index" app-y-axis [axisNumber]="i" [attr.height.px]="chartConfiguration.dimensions.height"
       [attr.width.px]="chartConfiguration.dimensions.width" [chartConfiguration]="chartConfiguration">
-    </svg:g>
-  </svg:g>
+    </g>
+    <g app-curve [chartConfiguration]="chartConfiguration" [serie]="serie">
+    </g>
+    <g app-clip-path [chartConfiguration]="chartConfiguration" id="clip">
+    </g>
+  </g>
 </svg>

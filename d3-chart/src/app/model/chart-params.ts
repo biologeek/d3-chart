@@ -32,7 +32,7 @@ export class Axis {
     label: string;
     min: number;
     max: number;
-    function: any;
+    function?: any;
 }
 
 export class Series {

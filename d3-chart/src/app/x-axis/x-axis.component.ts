@@ -28,6 +28,7 @@ export class XAxisComponent implements AfterViewInit {
       .domain(
         d3Array.extent([this.chartConfiguration.data.x.min, this.chartConfiguration.data.x.max])
       );
+      this.chartConfiguration.xAxis.function = this.x;
     this.generateAxis();
   }
   generateAxis() {

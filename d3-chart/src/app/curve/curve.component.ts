@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import * as d3Shape from 'd3-shape';
 import * as d3Selection from 'd3-selection';
 import { ChartConfiguration, Series, Serie } from '../model/chart-params';
 
 @Component({
-  selector: 'app-curve',
-  template: `
-  <svg:path id="path-{{serie.header.id}}" class="line" stroke="{{serie.header.color}}"></svg:path>
+  selector: 'g[app-curve]',
+  template: `<svg:path id="path-{{serie.header.id}}" class="line"></svg:path>
   `,
   styleUrls: ['./curve.component.css']
 })
 export class CurveComponent implements OnInit {
 
+  @Input()
   chartConfig: ChartConfiguration;
-
+  @Input()
   serie: Serie;
 
   line: any;
@@ -24,6 +24,7 @@ export class CurveComponent implements OnInit {
   ngOnInit() {
     this.defineLine();
     this.drawLine();
+    console.log(this.chartConfig.xAxis.function);
   }
 
   defineLine() {
@@ -35,6 +36,7 @@ export class CurveComponent implements OnInit {
   drawLine() {
     d3Selection.select(`#path-${this.serie.header.id}`)
       .attr('clip-path', 'url(#clip)')
+      .attr('stroke', this.serie.header.color)
       .attr('d', this.line(this.serie.values));
   }
 }
