@@ -1,8 +1,5 @@
 export class ChartConfiguration {
-    /**
-     * Margins between border of SVG element and chart, axis or whatever
-     */
-    margins: Margins;
+
     /**
      * Dimensions of SVG element
      */
@@ -21,6 +18,10 @@ export class ChartConfiguration {
 export class Dimensions {
     height: number;
     width: number;
+    /**
+    * Margins between border of SVG element and chart, axis or whatever
+    */
+   margins: Margins;
 }
 
 export class Axis {

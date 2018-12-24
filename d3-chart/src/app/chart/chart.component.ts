@@ -1,14 +1,14 @@
-import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, Input, AfterViewInit } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
-import { ChartConfiguration, Serie } from '../model/chart-params';
+import { ChartConfiguration, Series } from '../model/chart-params';
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements AfterViewInit {
 
 
   /**
@@ -19,20 +19,26 @@ export class ChartComponent implements OnInit {
   chartConfiguration: ChartConfiguration;
   serie: number;
 
+  @Input()
+  data: Series;
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
+
+    // console.log(this.chartConfiguration);
+
 
     this.serie = 0;
-    
+
     d3Selection.select('#chart')
-      .attr('transform', `translate(${this.chartConfiguration.margins.left},
-        ${this.chartConfiguration.margins.right})`)
-      .attr('width', this.chartConfiguration.dimensions.width -
-        this.chartConfiguration.margins.left - this.chartConfiguration.margins.right)
+      .attr('transform', `translate(${this.chartConfiguration.dimensions.margins.left},
+        ${this.chartConfiguration.dimensions.margins.right})`)
+      .attr('width', this.chartConfig1uration.dimensions.width -
+        this.chartConfiguration.dimensions.margins.left - this.chartConfiguration.dimensions.margins.right)
       .attr('height', this.chartConfiguration.dimensions.height -
-        this.chartConfiguration.margins.top - this.chartConfiguration.margins.bottom);
+        this.chartConfiguration.dimensions.margins.top - this.chartConfiguration.dimensions.margins.bottom);
   }
+
 
 }

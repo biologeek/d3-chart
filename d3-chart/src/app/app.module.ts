@@ -7,7 +7,6 @@ import { XAxisComponent } from './x-axis/x-axis.component';
 import { YAxisComponent } from './y-axis/y-axis.component';
 import { CurveComponent } from './curve/curve.component';
 import { ClipPathComponent } from './clip-path/clip-path.component';
-import { EventsService } from './services/events.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,7 @@ import { EventsService } from './services/events.service';
   imports: [
     BrowserModule
   ],
-  providers: [EventsService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

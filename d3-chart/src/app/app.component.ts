@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartConfiguration } from './model/chart-params';
-import { EventsService, MessageType } from './services/events.service';
-import { of, Observable } from 'rxjs';
+import { ChartConfiguration, Series } from './model/chart-params';
+
 
 @Component({
   selector: 'app-root',
@@ -11,18 +10,45 @@ import { of, Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'd3-chart';
 
-  chartConfig$: Observable<ChartConfiguration> = of({
-    dimensions: {
-      height: 500,
-      width: 900
-    },
-    xAxis: {
-      id: 1,
-      label: 'Date',
-      max: 10,
-      min: 0
-    },
-    data: {
+  chartConfig: ChartConfiguration;
+
+  chartData: Series;
+
+  constructor() { }
+
+  ngOnInit() {
+
+    this.chartConfig = {
+      dimensions: {
+        height: 500,
+        width: 900,
+        margins: {
+          left: 100,
+          right: 10,
+          top: 50,
+          bottom: 60
+        }
+      },
+      xAxis: {
+        id: 1,
+        label: 'Date',
+        max: 10,
+        min: 0
+      },
+      yAxes: [{
+        id: 1,
+        label: 'Axe 1',
+        max: 50,
+        min: 0
+      }, {
+        id: 2,
+        label: 'Axe 2',
+        max: 100,
+        min: 0
+      }]
+    };
+
+    this.chartData = {
       x: {
         min: 0,
         max: 100
@@ -61,29 +87,7 @@ export class AppComponent implements OnInit {
         ]
       ],
       y: null
-    },
-    margins: {
-      left: 100,
-      right: 10,
-      top: 50,
-      bottom: 60
-    },
-    yAxes: [{
-      id: 1,
-      label: 'Axe 1',
-      max: 50,
-      min: 0
-    }, {
-      id: 2,
-      label: 'Axe 2',
-      max: 100,
-      min: 0
-    }]
-  });
-
-  constructor(private eventService: EventsService) { }
-
-  ngOnInit() {
+    };
   }
 
 }

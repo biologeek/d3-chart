@@ -1,48 +1,56 @@
-import { Component, OnInit, Input, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import * as d3Shape from 'd3-shape';
 import * as d3Selection from 'd3-selection';
-import { ChartConfiguration, Series, Serie } from '../model/chart-params';
-import { EventsService, MessageType } from '../services/events.service';
-import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { ChartState } from '../ngrx/reducers/chart.reducer';
+import { Series, Axis } from '../model/chart-params';
 
 @Component({
   selector: 'g[app-curve]',
   template: `<svg:path id="path-{{serie}}" class="line"></svg:path>`,
   styleUrls: ['./curve.component.css']
 })
-export class CurveComponent implements AfterViewInit, OnChanges {
+export class CurveComponent implements OnInit, OnChanges {
 
-  chartConfig: ChartConfiguration;
+  @Input()
   data: Series;
+  @Input()
+  xAxis: Axis;
+  @Input()
+  yAxes: Axis[];
+
+  _data: Series;
+  _xAxis: Axis;
+  _yAxes: Axis[];
+
   @Input()
   serie: number;
 
   line: any;
 
-  constructor(private store: Store<ChartState>) { }
+  constructor() { }
 
-  ngAfterViewInit() {
-    this.defineLine();
-    this.drawLine();
+  ngOnInit() {
+      this.defineLine();
+      this.drawLine();
   }
-
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    this._data = changes.data.currentValue;
+    this._xAxis = changes.xAxis.currentValue;
+    this._yAxes = changes.yAxes.currentValue;
     this.defineLine();
     this.drawLine();
   }
 
   defineLine() {
-    console.log(this.chartConfig);
-    if (this.chartConfig.xAxis.function && this.chartConfig.yAxes[this.serie].function) {
-      this.line = d3Shape.line()//
-        .x(d => {
-          console.log(this.chartConfig.xAxis);
-          this.chartConfig.xAxis.function(d.x);
-        })//
-        .y(d => this.chartConfig.yAxes[this.serie].function(d.y));
+    if (this._xAxis && this._yAxes) {
+      if (this._xAxis.function && this._yAxes[this.serie].function) {
+        this.line = d3Shape.line()//
+          .x(d => {
+            console.log(this._xAxis);
+            this._xAxis.function(d.x);
+          })//
+          .y(d => this._yAxes[this.serie].function(d.y));
+      }
     }
   }
 

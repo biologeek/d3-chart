@@ -1,47 +1,59 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
-import * as d3TimeFormat from 'd3-time-format';
-import { ChartConfiguration } from '../model/chart-params';
-import { EventsService, MessageType } from '../services/events.service';
-import { Subject } from 'rxjs';
+import { Axis, Dimensions } from '../model/chart-params';
 
 @Component({
   selector: 'g[app-x-axis]',
   templateUrl: './x-axis.component.html',
   styleUrls: ['./x-axis.component.css']
 })
-export class XAxisComponent implements AfterViewInit {
+export class XAxisComponent implements OnInit, OnChanges, OnDestroy {
+
 
   @Input()
-  chartConfiguration: ChartConfiguration;
+  xAxisConfig: Axis;
+  @Input()
+  chartDimensions: Dimensions;
+
+  /**
+   * Internal implementation
+   */
+  _chartDimensions: Dimensions;
+  _xAxisConfig: Axis;
 
   x: any;
+  constructor() { }
 
-  constructor(private eventService: EventsService) { }
+  ngOnInit() {
 
-  ngAfterViewInit() {
-    this.buildAxis();
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    this._chartDimensions = changes.chartDimensions.currentValue;
+    this._xAxisConfig = changes.xAxisConfig.currentValue;
+  }
+
+  ngOnDestroy() {
   }
 
   buildAxis() {
     this.x = d3Scale.scaleTime()
-      .range([this.chartConfiguration.margins.left,
-      this.chartConfiguration.dimensions.width - this.chartConfiguration.margins.right - this.chartConfiguration.margins.left])
+      .range([this._chartDimensions.margins.left,
+      this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left])
       .domain(
-        d3Array.extent([this.chartConfiguration.data.x.min, this.chartConfiguration.data.x.max])
+        d3Array.extent([this._xAxisConfig.min, this._xAxisConfig.max])
       );
-    this.chartConfiguration.xAxis.function = this.x;
+    this._xAxisConfig.function = this.x;
     this.generateAxis();
   }
 
   generateAxis() {
     d3Selection.select('[app-x-axis]')
-      .attr('transform', `translate(0, ${this.chartConfiguration.dimensions.height
-        - this.chartConfiguration.margins.bottom})`)
+      .attr('transform', `translate(0, ${this._chartDimensions.height
+        - this._chartDimensions.margins.bottom})`)
       .attr('stroke-width', 2)
       .call(
         d3Axis.axisBottom(this.x)
