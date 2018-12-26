@@ -10,7 +10,7 @@ import { Axis, Dimensions } from '../model/chart-params';
   templateUrl: './y-axis.component.html',
   styleUrls: ['./y-axis.component.css']
 })
-export class YAxisComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   @Input()
   yAxisConfig: Axis;
@@ -31,31 +31,30 @@ export class YAxisComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   y: any;
 
-
   constructor() { }
 
   ngAfterViewInit() {
-
+    this.updateAxis();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this._chartDimensions = changes.chartDimensions.currentValue;
     this._yAxisConfig = changes.yAxisConfig.currentValue;
+    this.updateAxis();
   }
 
   updateAxis() {
     if (this._chartDimensions && this._yAxisConfig) {
       console.log('Updating yAxis ' + this.axisNumber);
-      const currentAxis = this._yAxisConfig[this.axisNumber];
 
       this.y = d3Scale
         .scaleLinear()
         .range([this._chartDimensions.height - this._chartDimensions.margins.bottom
           , this._chartDimensions.margins.bottom])
-        .domain([currentAxis.min, currentAxis.max]);
+        .domain([this._yAxisConfig.min, this._yAxisConfig.max]);
 
-      currentAxis.function = this.y;
-
+      this._yAxisConfig.function = this.y;
+      console.log(d3Selection.select(`g#y-axis-${this.axisNumber}`));
       d3Selection.select(`g#y-axis-${this.axisNumber}`)
         .attr('transform', 'translate('
           + (this._chartDimensions.margins.left - this.axisNumber * 50)
@@ -69,12 +68,8 @@ export class YAxisComponent implements AfterViewInit, OnChanges, OnDestroy {
         .attr('dx', '0.2rem')
         .attr('fill', '#000')
         .attr('font-size', '1rem')
-        .text(currentAxis.label);
+        .text(this._yAxisConfig.label);
     }
-  }
-
-  assignAxis() {
-    this._yAxisConfig[this.axisNumber].function = this.y;
   }
 
   ngOnDestroy() {

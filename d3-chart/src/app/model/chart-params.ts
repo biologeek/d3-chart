@@ -33,10 +33,9 @@ export class Axis {
 }
 
 export class Series {
-    headers: SeriesHeaders;
-    values: SeriesValues;
-    x: MinMaxValues;
-    y: Array<MinMaxValues>;
+    series: Array<Serie>;
+    x: MinMaxValues<Date>;
+    y: Array<MinMaxValues<number>>;
 }
 
 export class Serie {
@@ -47,9 +46,9 @@ export class Serie {
 }
 
 
-export class MinMaxValues {
-    min: number;
-    max: number;
+export class MinMaxValues<T> {
+    min: T;
+    max: T;
 }
 
 export class SeriesValues extends Array<SerieValues> {}
@@ -57,7 +56,7 @@ export class SeriesValues extends Array<SerieValues> {}
 export class SerieValues extends Array<SerieValue> {}
 
 export class SerieValue {
-    x: number;
+    x: Date;
     y: number;
 }
 export class SeriesHeaders extends Array<SerieHeader> {
@@ -67,6 +66,11 @@ export class SerieHeader {
     id: number;
     axis: number;
     color: string;
+    line: LineType;
+}
+
+export enum LineType {
+    LINE, DASHED, DOTTED
 }
 
 export class Margins {

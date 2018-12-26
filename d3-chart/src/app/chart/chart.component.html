@@ -1,15 +1,15 @@
-<svg [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration?.dimensions.width">
+<svg [attr.height.px]="_config.dimensions.height" [attr.width.px]="_config?.dimensions.width">
   <g id="chart">
-    <g app-x-axis [attr.height.px]="chartConfiguration.dimensions.height" [attr.width.px]="chartConfiguration?.dimensions.width">
+    <g app-x-axis [xAxisConfig]="_config.xAxis" [chartDimensions]="_config.dimensions" [attr.height.px]="_config.dimensions.height"
+      [attr.width.px]="_config?.dimensions.width">
     </g>
-    <g *ngFor="let axis of chartConfiguration?.yAxes; let i = index" app-y-axis [axisNumber]="i" [attr.height.px]="chartConfiguration?.dimensions.height"
-      [attr.width.px]="chartConfiguration?.dimensions.width">
+    <g *ngFor="let axis of _config?.yAxes; let i = index" app-y-axis [yAxisConfig]="axis" [chartDimensions]="_config.dimensions"
+      [axisNumber]="i" [attr.height.px]="_config?.dimensions.height" [attr.width.px]="_config?.dimensions.width">
     </g>
-    <g *ngFor="let axis of chartConfiguration?.data?.values; let i = index" app-curve
-      [attr.height.px]="chartConfiguration?.dimensions.height" [attr.width.px]="chartConfiguration?.dimensions.width"
-      [serie]="i">
+    <g *ngFor="let curve of _data.series; let i = index" app-curve id="path-{{curve.header.id}}" [data]="curve" [xAxis]="_config.xAxis" [yAxis]="curve.y"
+      [attr.height.px]="_config?.dimensions.height" [attr.width.px]="_config?.dimensions.width" [serie]="i">
     </g>
-    <g app-clip-path [chartConfiguration]="chartConfiguration" id="clip">
+    <g app-clip-path [chartConfiguration]="_config" id="clip">
     </g>
   </g>
 </svg>

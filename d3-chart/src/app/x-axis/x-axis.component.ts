@@ -11,7 +11,7 @@ import { Axis, Dimensions } from '../model/chart-params';
   templateUrl: './x-axis.component.html',
   styleUrls: ['./x-axis.component.css']
 })
-export class XAxisComponent implements OnInit, OnChanges, OnDestroy {
+export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
 
 
   @Input()
@@ -28,12 +28,16 @@ export class XAxisComponent implements OnInit, OnChanges, OnDestroy {
   x: any;
   constructor() { }
 
-  ngOnInit() {
+  /*ngOnInit() {
+    this._chartDimensions = this.chartDimensions;
+    this._xAxisConfig = this.xAxisConfig;
+  }*/
 
-  }
   ngOnChanges(changes: SimpleChanges) {
     this._chartDimensions = changes.chartDimensions.currentValue;
     this._xAxisConfig = changes.xAxisConfig.currentValue;
+
+    this.buildAxis();
   }
 
   ngOnDestroy() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnInit } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
 import { ChartConfiguration } from '../model/chart-params';
