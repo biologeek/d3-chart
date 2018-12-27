@@ -7,6 +7,7 @@ import { XAxisComponent } from './x-axis/x-axis.component';
 import { YAxisComponent } from './y-axis/y-axis.component';
 import { CurveComponent } from './curve/curve.component';
 import { ClipPathComponent } from './clip-path/clip-path.component';
+import { CurveDotComponent } from './curve-dot/curve-dot.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ClipPathComponent } from './clip-path/clip-path.component';
     XAxisComponent,
     YAxisComponent,
     CurveComponent,
-    ClipPathComponent
+    ClipPathComponent,
+    CurveDotComponent
   ],
   imports: [
     BrowserModule

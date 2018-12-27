@@ -3,7 +3,8 @@ import { Component, Input, AfterViewInit, OnDestroy, OnChanges, SimpleChanges, O
 import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Axis from 'd3-axis';
-import { Axis, Dimensions } from '../model/chart-params';
+import * as d3Array from 'd3-array';
+import { Axis, Dimensions, Series, Serie } from '../model/chart-params';
 
 @Component({
   selector: 'g[app-y-axis]',
@@ -22,9 +23,19 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
    */
   _chartDimensions: Dimensions;
   _yAxisConfig: Axis;
+  _data: Series;
+  _autoScale: boolean;
 
   @Input()
   axisNumber: number;
+  @Input()
+  autoScale: boolean;
+
+  /**
+   * All series, not only the ones bound to this axis
+   */
+  @Input()
+  data: Series;
 
   @Output()
   functionChange: EventEmitter<any> = new EventEmitter();
@@ -34,24 +45,49 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
   constructor() { }
 
   ngAfterViewInit() {
+    this._data = this.data;
+    this._autoScale = this.autoScale;
+    this._chartDimensions = this.chartDimensions;
+    this._yAxisConfig = this.yAxisConfig;
     this.updateAxis();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this._chartDimensions = changes.chartDimensions.currentValue;
-    this._yAxisConfig = changes.yAxisConfig.currentValue;
+    if (changes.chartDimensions) {
+      this._chartDimensions = changes.chartDimensions.currentValue;
+    }
+    if (changes.yAxisConfig) {
+      this._yAxisConfig = changes.yAxisConfig.currentValue;
+    }
+    if (changes.data) {
+      this._data = changes.data.currentValue;
+    }
+    if (changes.autoScale) {
+      this._autoScale = changes.autoScale.currentValue;
+    }
     this.updateAxis();
   }
 
   updateAxis() {
     if (this._chartDimensions && this._yAxisConfig) {
       console.log('Updating yAxis ' + this.axisNumber);
+      console.log([this._yAxisConfig.min, this._yAxisConfig.max]);
 
       this.y = d3Scale
         .scaleLinear()
         .range([this._chartDimensions.height - this._chartDimensions.margins.bottom
-          , this._chartDimensions.margins.bottom])
-        .domain([this._yAxisConfig.min, this._yAxisConfig.max]);
+          , this._chartDimensions.margins.bottom]);
+
+      if (this._autoScale) {
+        const boundCurves: number[] = [].concat(
+          this._data.series
+          .filter(s => s.header.axis === this.axisNumber)
+          .map(s => s.values.map(t => t.y))
+          )[0];
+        this.y.domain([Math.min(...boundCurves), Math.max(...boundCurves)]);
+      } else {
+        this.y.domain([this._yAxisConfig.min, this._yAxisConfig.max]);
+      }
 
       this._yAxisConfig.function = this.y;
       console.log(d3Selection.select(`g#y-axis-${this.axisNumber}`));

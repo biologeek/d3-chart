@@ -4,7 +4,8 @@ import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
-import { Axis, Dimensions } from '../model/chart-params';
+import * as d3TimeFormat from 'd3-time-format';
+import { Axis, Dimensions, Series } from '../model/chart-params';
 
 @Component({
   selector: 'g[app-x-axis]',
@@ -16,6 +17,13 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
 
   @Input()
   xAxisConfig: Axis;
+
+  @Input()
+  autoScale: boolean;
+
+  @Input()
+  data: Series;
+
   @Input()
   chartDimensions: Dimensions;
 
@@ -24,6 +32,7 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
    */
   _chartDimensions: Dimensions;
   _xAxisConfig: Axis;
+  _data: Series;
 
   x: any;
   constructor() { }
@@ -34,9 +43,15 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
   }*/
 
   ngOnChanges(changes: SimpleChanges) {
-    this._chartDimensions = changes.chartDimensions.currentValue;
-    this._xAxisConfig = changes.xAxisConfig.currentValue;
-
+    if (changes.chartDimensions) {
+      this._chartDimensions = changes.chartDimensions.currentValue;
+    }
+    if (changes.xAxisConfig) {
+      this._xAxisConfig = changes.xAxisConfig.currentValue;
+    }
+    if (changes.data) {
+      this._data = changes.data.currentValue;
+    }
     this.buildAxis();
   }
 
@@ -46,10 +61,15 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
   buildAxis() {
     this.x = d3Scale.scaleTime()
       .range([this._chartDimensions.margins.left,
-      this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left])
-      .domain(
-        d3Array.extent([this._xAxisConfig.min, this._xAxisConfig.max])
-      );
+      this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
+
+    if (this.autoScale) {
+      this.x.domain(d3Array.extent([].concat(this.data.series.map(s => s.values.map(a => a.x)))[0]));
+    } else {
+      this.x.domain([new Date(this._xAxisConfig.min), new Date(this._xAxisConfig.max)]);
+    }
+    console.log([this._chartDimensions.margins.left,
+    this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
     this._xAxisConfig.function = this.x;
     this.generateAxis();
   }
@@ -61,12 +81,12 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
       .attr('stroke-width', 2)
       .call(
         d3Axis.axisBottom(this.x)
-        /*.ticks(10)
-        .tickFormat(d3TimeFormat.timeFormat('%d/%m/%Y %H:%M'))*/
+          .ticks(10)
+          .tickFormat(d3TimeFormat.timeFormat('%d/%m/%Y %H:%M'))
       ).selectAll('text')
       .attr('fill', 'black')
       .attr('transform', 'rotate(-45)')
-      .attr('font-size', '0.9rem')
+      .attr('font-size', '0.5rem')
       .attr('dx', '-1.5rem')
       .attr('dy', '0.7rem');
   }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartConfiguration, Series, LineType } from './model/chart-params';
 
+import * as _ from 'lodash';
+
 
 @Component({
   selector: 'app-root',
@@ -21,13 +23,13 @@ export class AppComponent implements OnInit {
     const axisX = {
       id: 1,
       label: 'Date',
-      max: 10,
+      max: 100,
       min: 0
     };
     const axisY = {
       id: 1,
       label: 'Axe 1',
-      max: 50,
+      max: 100,
       min: 0
     };
 
@@ -39,7 +41,7 @@ export class AppComponent implements OnInit {
           left: 100,
           right: 10,
           top: 50,
-          bottom: 60
+          bottom: 80
         }
       },
       xAxis: axisX,
@@ -53,8 +55,8 @@ export class AppComponent implements OnInit {
 
     this.chartData = {
       x: {
-        min: new Date(0),
-        max: new Date(100)
+        min: 0,
+        max: 100
       },
       y: [{
         min: 0,
@@ -73,30 +75,53 @@ export class AppComponent implements OnInit {
         values:
           [
             {
-              x: new Date(5),
+              x: 5,
               y: 10
             }, {
-              x: new Date(10),
+              x: 10,
               y: 20
             }, {
-              x: new Date(30),
+              x: 30,
               y: 10
             }, {
-              x: new Date(40),
+              x: 40,
               y: 15
             }, {
-              x: new Date(50),
+              x: 50,
               y: 50
             }, {
-              x: new Date(60),
+              x: 60,
               y: 15
             }, {
-              x: new Date(80),
+              x: 80,
               y: 1
             }
           ]
       }]
     };
+    let i = 0;
+    setInterval(() => {
+
+      const newObj: Series = _.cloneDeep(this.chartData);
+      const newConfig: ChartConfiguration = _.cloneDeep(this.chartConfig);
+
+      newObj.series[0].values.push({
+        x: 100 + 10 * i,
+        y: 20 + 3 * i
+      });
+      this.chartData = newObj;
+     /* newConfig.xAxis.max = 100 + 10 * i;
+      newConfig.yAxes[0].max = 20 + 3 * i;
+*/
+      newObj.series[0].y = newConfig.yAxes[0];
+
+      newObj.series[0].x = newConfig.xAxis;
+
+
+      this.chartConfig = newConfig;
+      console.log('Incrementing : i=' + i);
+      i++;
+    }, 3000);
   }
 
 }

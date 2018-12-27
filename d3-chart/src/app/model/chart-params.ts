@@ -27,14 +27,14 @@ export class Dimensions {
 export class Axis {
     id: number;
     label: string;
-    min: number;
-    max: number;
+    min: any;
+    max: any;
     function?: Function;
 }
 
 export class Series {
     series: Array<Serie>;
-    x: MinMaxValues<Date>;
+    x: MinMaxValues<number>;
     y: Array<MinMaxValues<number>>;
 }
 
@@ -56,7 +56,7 @@ export class SeriesValues extends Array<SerieValues> {}
 export class SerieValues extends Array<SerieValue> {}
 
 export class SerieValue {
-    x: Date;
+    x: any;
     y: number;
 }
 export class SeriesHeaders extends Array<SerieHeader> {

@@ -29,8 +29,12 @@ export class ChartComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
-    this._config = changes.config.currentValue;
-    this._data = changes.data.currentValue;
+    if (changes.config) {
+      this._config = changes.config.currentValue;
+    }
+    if (changes.data) {
+      this._data = changes.data.currentValue;
+    }
     console.log(this._config);
     console.log(this._data);
   }

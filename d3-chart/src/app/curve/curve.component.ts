@@ -55,11 +55,11 @@ export class CurveComponent implements AfterViewInit, OnChanges {
       if (this._xAxis.function && this._yAxis.function) {
         this.line = d3Shape.line()//
           .x(d => {
-            console.log('X '+this._xAxis.function(d.x));
-            this._xAxis.function(d.x);
+            console.log('X ' + this._xAxis.function(d.x));
+            return this._xAxis.function(d.x);
           })//
           .y(d => {
-            console.log('y '+this._yAxis.function(d.y));
+            console.log('y ' + d.y);
             return this._yAxis.function(d.y);
           });
       }
@@ -68,12 +68,13 @@ export class CurveComponent implements AfterViewInit, OnChanges {
 
   drawLine() {
     if (this.line) {
-      console.log(this.line(this._data.values));
+      console.log(this._data.values);
       d3Selection.select(`#path-${this._data.header.id} path`)
-        // .attr('clip-path', 'url(#clip)')
+        .datum(this._data.values)
+        .attr('clip-path', 'url(#clip)')
         .attr('fill', 'none')
         .attr('stroke', this._data.header.color)
-        .attr('d', this.line(this._data.values));
+        .attr('d', this.line);
     }
   }
 }
