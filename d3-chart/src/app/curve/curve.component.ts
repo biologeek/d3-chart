@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit } fro
 
 import * as d3Shape from 'd3-shape';
 import * as d3Selection from 'd3-selection';
-import { Series, Axis, Serie } from '../model/chart-params';
+import { Series, Axis, Serie, LineType } from '../model/chart-params';
 
 @Component({
   selector: 'g[app-curve]',
@@ -69,12 +69,18 @@ export class CurveComponent implements AfterViewInit, OnChanges {
   drawLine() {
     if (this.line) {
       console.log(this._data.values);
-      d3Selection.select(`#path-${this._data.header.id} path`)
+      const path = d3Selection.select(`#path-${this._data.header.id} path`)
         .datum(this._data.values)
         .attr('clip-path', 'url(#clip)')
         .attr('fill', 'none')
         .attr('stroke', this._data.header.color)
         .attr('d', this.line);
+
+        if (this._data.header.line === LineType.DASHED) {
+          path.style('stroke-dasharray', ('6, 6'));
+        } else if (this._data.header.line === LineType.DOTTED) {
+          path.style('stroke-dasharray', ('2, 2'));
+        }
     }
   }
 }

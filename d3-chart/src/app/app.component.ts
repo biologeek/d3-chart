@@ -68,32 +68,32 @@ export class AppComponent implements OnInit {
           axis: 0,
           id: 0,
           color: 'green',
-          line: LineType.LINE
+          line: LineType.DASHED
         },
         x: axisX,
         y: axisY,
         values:
           [
             {
-              x: 5,
+              x: 500000,
               y: 10
             }, {
-              x: 10,
+              x: 501000,
               y: 20
             }, {
-              x: 30,
+              x: 502000,
               y: 10
             }, {
-              x: 40,
+              x: 503000,
               y: 15
             }, {
-              x: 50,
+              x: 504000,
               y: 50
             }, {
-              x: 60,
+              x: 505000,
               y: 15
             }, {
-              x: 80,
+              x: 506000,
               y: 1
             }
           ]
@@ -106,8 +106,8 @@ export class AppComponent implements OnInit {
       const newConfig: ChartConfiguration = _.cloneDeep(this.chartConfig);
 
       newObj.series[0].values.push({
-        x: 100 + 10 * i,
-        y: 20 + 3 * i
+        x: 500000 + 10000 * i,
+        y: Math.random() * 200
       });
       this.chartData = newObj;
      /* newConfig.xAxis.max = 100 + 10 * i;
@@ -121,7 +121,7 @@ export class AppComponent implements OnInit {
       this.chartConfig = newConfig;
       console.log('Incrementing : i=' + i);
       i++;
-    }, 3000);
+    }, 100000);
   }
 
 }

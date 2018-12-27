@@ -15,6 +15,11 @@ export class ChartConfiguration {
 
 }
 
+export class AutoScale {
+    x: boolean;
+    y: boolean;
+}
+
 export class Dimensions {
     height: number;
     width: number;

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnInit } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
-import { ChartConfiguration } from '../model/chart-params';
+import { ChartConfiguration, Dimensions } from '../model/chart-params';
 
 @Component({
   selector: 'g[app-clip-path]',
@@ -11,7 +11,7 @@ import { ChartConfiguration } from '../model/chart-params';
 export class ClipPathComponent implements OnInit {
 
   @Input()
-  chartConfiguration: ChartConfiguration;
+  dimensions: Dimensions;
 
   constructor() { }
 
@@ -20,12 +20,12 @@ export class ClipPathComponent implements OnInit {
       .append('clipPath')
       .attr('id', 'clip')
       .append('rect')
-      .attr('width', this.chartConfiguration.dimensions.width - this.chartConfiguration.dimensions.margins.left
-        - this.chartConfiguration.dimensions.margins.right)
-      .attr('height', this.chartConfiguration.dimensions.height - this.chartConfiguration.dimensions.margins.bottom
-        - this.chartConfiguration.dimensions.margins.top)
-      .attr('transform', `translate(${this.chartConfiguration.dimensions.margins.left},
-        ${this.chartConfiguration.dimensions.margins.top})`);
+      .attr('width', this.dimensions.width - this.dimensions.margins.left
+        - this.dimensions.margins.right)
+      .attr('height', this.dimensions.height - this.dimensions.margins.bottom
+        - this.dimensions.margins.top)
+      .attr('transform', `translate(${this.dimensions.margins.left},
+        ${this.dimensions.margins.top})`);
   }
 
 }

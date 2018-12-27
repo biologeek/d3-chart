@@ -64,7 +64,7 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
       this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
 
     if (this.autoScale) {
-      this.x.domain(d3Array.extent([].concat(this.data.series.map(s => s.values.map(a => a.x)))[0]));
+      this.x.domain(d3Array.extent([].concat(this.data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
     } else {
       this.x.domain([new Date(this._xAxisConfig.min), new Date(this._xAxisConfig.max)]);
     }
