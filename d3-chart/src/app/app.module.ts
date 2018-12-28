@@ -8,6 +8,7 @@ import { YAxisComponent } from './y-axis/y-axis.component';
 import { CurveComponent } from './curve/curve.component';
 import { ClipPathComponent } from './clip-path/clip-path.component';
 import { CurveDotComponent } from './curve-dot/curve-dot.component';
+import { CurveDotsSetComponent } from './curve-dots-set/curve-dots-set.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { CurveDotComponent } from './curve-dot/curve-dot.component';
     YAxisComponent,
     CurveComponent,
     ClipPathComponent,
-    CurveDotComponent
+    CurveDotComponent,
+    CurveDotsSetComponent
   ],
   imports: [
     BrowserModule

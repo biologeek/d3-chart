@@ -22,16 +22,34 @@ export class ChartComponent implements OnInit, OnChanges {
    */
   @Input()
   dimensions: Dimensions;
+  /**
+   * X axis configuration
+   */
   @Input()
   xAxis: Axis;
+  /**
+   * Possibility to have several Y axes in the same chart and assign a curve or a set of points to a specific axis.
+   * 
+   * This will be useful for updating only paths or dots sets attached to the modified axis.
+   */
   @Input()
   yAxes: Axis[];
+  /**
+   * Data series configuration.
+   */
   @Input()
   data: Series;
 
+
+  /**
+   * Auto scaling of axes X and Y separtely. Default is both axes auto scaled.
+   */
   @Input()
   autoScale: AutoScale;
 
+  /**
+   * Internal implementations
+   */
   _autoScale: AutoScale;
   _xAxis: Axis;
   _yAxes: Axis[];
@@ -57,10 +75,10 @@ export class ChartComponent implements OnInit, OnChanges {
     if (changes.autoScale) {
       this._autoScale = changes.autoScale.currentValue;
     }
-    console.log(this._xAxis);
-    console.log(this._yAxes);
-    console.log(this._dimensions);
-    console.log(this._data);
+    // console.log(this._xAxis);
+    // console.log(this._yAxes);
+    // console.log(this._dimensions);
+    // console.log(this._data);
   }
 
   ngOnInit() {
@@ -75,10 +93,10 @@ export class ChartComponent implements OnInit, OnChanges {
     }
     // console.log(this.chartConfiguration);
 
-    console.log(this._xAxis);
-    console.log(this._yAxes);
-    console.log(this._dimensions);
-    console.log(this._data);
+    // console.log(this._xAxis);
+    // console.log(this._yAxes);
+    // console.log(this._dimensions);
+    // console.log(this._data);
 
     d3Selection.select('#chart')
       .attr('transform', `translate(${this.dimensions.margins.left},

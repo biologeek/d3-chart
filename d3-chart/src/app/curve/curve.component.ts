@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewInit } fro
 
 import * as d3Shape from 'd3-shape';
 import * as d3Selection from 'd3-selection';
-import { Series, Axis, Serie, LineType } from '../model/chart-params';
+import { Series, Axis, Serie, LineType, SerieValues } from '../model/chart-params';
 
 @Component({
   selector: 'g[app-curve]',
@@ -45,9 +45,9 @@ export class CurveComponent implements AfterViewInit, OnChanges {
     this._yAxis = changes.yAxis.currentValue;
     this.defineLine();
     this.drawLine();
-    console.log(this._xAxis);
-    console.log(this._yAxis);
-    console.log(this._data);
+    // console.log(this._xAxis);
+    // console.log(this._yAxis);
+    // console.log(this._data);
   }
 
   defineLine() {
@@ -69,6 +69,9 @@ export class CurveComponent implements AfterViewInit, OnChanges {
   drawLine() {
     if (this.line) {
       console.log(this._data.values);
+      if (this._data.values.length > this._data.header.maxPoints) {
+        this._data.values = this._data.values.slice(Math.max(this._data.values.length - this._data.header.maxPoints, 1));
+      }
       const path = d3Selection.select(`#path-${this._data.header.id} path`)
         .datum(this._data.values)
         .attr('clip-path', 'url(#clip)')

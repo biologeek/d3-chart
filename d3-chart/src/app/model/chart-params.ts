@@ -72,6 +72,7 @@ export class SerieHeader {
     axis: number;
     color: string;
     line: LineType;
+    maxPoints?: number;
 }
 
 export enum LineType {

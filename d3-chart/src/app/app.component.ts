@@ -68,7 +68,8 @@ export class AppComponent implements OnInit {
           axis: 0,
           id: 0,
           color: 'green',
-          line: LineType.DASHED
+          line: LineType.DASHED,
+          maxPoints: 5
         },
         x: axisX,
         y: axisY,
@@ -121,7 +122,7 @@ export class AppComponent implements OnInit {
       this.chartConfig = newConfig;
       console.log('Incrementing : i=' + i);
       i++;
-    }, 100000);
+    }, 500);
   }
 
 }
