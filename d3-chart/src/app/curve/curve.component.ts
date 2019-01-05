@@ -35,9 +35,9 @@ export class CurveComponent implements AfterViewInit, OnChanges {
     this._yAxis = this.yAxis;
     this.defineLine();
     this.drawLine();
-    console.log(this._xAxis);
-    console.log(this._yAxis);
-    console.log(this._data);
+    // console.log(this._xAxis);
+    // console.log(this._yAxis);
+    // console.log(this._data);
   }
   ngOnChanges(changes: SimpleChanges) {
     this._data = changes.data.currentValue;
@@ -45,9 +45,9 @@ export class CurveComponent implements AfterViewInit, OnChanges {
     this._yAxis = changes.yAxis.currentValue;
     this.defineLine();
     this.drawLine();
-    // console.log(this._xAxis);
-    // console.log(this._yAxis);
-    // console.log(this._data);
+    // // console.log(this._xAxis);
+    // // console.log(this._yAxis);
+    // // console.log(this._data);
   }
 
   defineLine() {
@@ -55,11 +55,11 @@ export class CurveComponent implements AfterViewInit, OnChanges {
       if (this._xAxis.function && this._yAxis.function) {
         this.line = d3Shape.line()//
           .x(d => {
-            console.log('X ' + this._xAxis.function(d.x));
+            // console.log('X ' + this._xAxis.function(d.x));
             return this._xAxis.function(d.x);
           })//
           .y(d => {
-            console.log('y ' + d.y);
+            // console.log('y ' + d.y);
             return this._yAxis.function(d.y);
           });
       }
@@ -68,7 +68,7 @@ export class CurveComponent implements AfterViewInit, OnChanges {
 
   drawLine() {
     if (this.line) {
-      console.log(this._data.values);
+      // console.log(this._data.values);
       if (this._data.values.length > this._data.header.maxPoints) {
         this._data.values = this._data.values.slice(Math.max(this._data.values.length - this._data.header.maxPoints, 1));
       }

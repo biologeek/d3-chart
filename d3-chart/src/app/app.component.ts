@@ -68,8 +68,20 @@ export class AppComponent implements OnInit {
           axis: 0,
           id: 0,
           color: 'green',
-          line: LineType.DASHED,
-          maxPoints: 5
+          line: LineType.LINE,
+          maxPoints: 50,
+          dotConfig: {
+            click: () => {
+              window.alert('Click');
+            },
+            rightClick: () => {
+              window.alert('Right Click');
+            },
+            colorHex: (data: any) => {
+              return data > 40 ? '#000000' : '#ff0000';
+            },
+            diameter: 5
+          }
         },
         x: axisX,
         y: axisY,
@@ -108,7 +120,8 @@ export class AppComponent implements OnInit {
 
       newObj.series[0].values.push({
         x: 500000 + 10000 * i,
-        y: Math.random() * 200
+        y: Math.random() * 200,
+        dotConfigData: Math.random() * 200
       });
       this.chartData = newObj;
      /* newConfig.xAxis.max = 100 + 10 * i;
@@ -122,7 +135,7 @@ export class AppComponent implements OnInit {
       this.chartConfig = newConfig;
       console.log('Incrementing : i=' + i);
       i++;
-    }, 500);
+    }, 500000);
   }
 
 }

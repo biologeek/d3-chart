@@ -1,37 +1,41 @@
 import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
-import { Serie, Axis } from '../model/chart-params';
+import { Serie, Axis, SerieValue } from '../model/chart-params';
+import * as d3Selection from 'd3-selection';
+import * as d3TimeFormat from 'd3-time-format';
+import * as d3Transition from 'd3-transition';
 
 /**
  * Represents a group of dots belonging to same serie.
+ * Equivalent to an <app-curve>
  */
 @Component({
-  selector: 'app-curve-dots-set',
-  template: `<circle app-curve-dot
-  *ngFor="let dot of _data.values"
-  [color]="_data.header.color"
-  [yAxis]="_yAxis"
-  [xAxis]="_xAxis"></app-curve-dot>`,
+  selector: 'g[app-curve-dots-set]',
+  // templateUrl: 'curve-dots-set.component.html',
+  template: `<svg:circle
+  class='dot'
+  *ngFor='let dot of _data.values; let i = index'
+  [attr.cx]='_data.x.function(dot.x)'
+  [attr.cy]='_data.y.function(dot.y)'
+  id='dot-{{i}}'
+  [attr.r]='_data.header.dotConfig.diameter'
+  [attr.fill]="_data.header.dotConfig.colorHex(dot.dotConfigData)"
+  (click)='onClickDot(i)'
+  (mouseover)="onMouseOverDot(i, $event)"
+  ></svg:circle>`,
   styleUrls: ['./curve-dots-set.component.css']
 })
 export class CurveDotsSetComponent implements OnInit, OnChanges {
 
   @Input()
   data: Serie;
-  @Input()
-  xAxis: Axis;
-  @Input()
-  yAxis: Axis;
 
   _data: Serie;
-  _xAxis: Axis;
-  _yAxis: Axis;
 
   constructor() { }
 
   ngOnInit() {
     this._data = this.data;
-    this._xAxis = this.xAxis;
-    this._yAxis = this.yAxis;
+    this.updateDots();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -39,11 +43,61 @@ export class CurveDotsSetComponent implements OnInit, OnChanges {
       this._data = changes.data.currentValue;
     }
     if (changes.xAxis) {
-      this._xAxis = changes.xAxis.currentValue;
+      this._data.x = changes.xAxis.currentValue;
     }
     if (changes.yAxis) {
-      this._yAxis = changes.yAxis.currentValue;
+      this._data.y = changes.yAxis.currentValue;
     }
+
+    this.updateDots();
+  }
+
+
+  /**
+   * Selects current set and updates their positions
+   */
+  updateDots() {
+
+  }
+
+
+  /**
+   * When user hovers dot, user-defined behaviour is executed.
+   *
+   * For the moment, implementing a default behaviour (tooltip open)
+   * @param i dot position
+   */
+  onMouseOverDot(i: number, $event) {
+    if (this._data.values.length < i) {
+      return;
+    }
+    this.defaultHoverTooltipBehaviour(this._data.values[i], $event);
+    // this._data.header.dotConfig.hover(this._data.values[i]);
+  }
+
+  /**
+   * When user clicks a dot on the chart, it must be highlighted along with other dots sharing same abscissa
+   * @param i position of dot in _data.values
+   */
+  onClickDot(i: number) {
+    if (this._data.values.length < i) {
+      return;
+    }
+  }
+
+  defaultHoverTooltipBehaviour(d: SerieValue, event) {
+
+    const div = d3Selection.select('div[app-dot-tooltip]')
+      .style('width', '150px')
+      .style('position', 'absolute')
+      .style('opacity', 0.9)
+      .style('left', event.x + 28 + 'px')
+      .style('top', event.y - 28 + 'px');
+
+    const formatTime = d3TimeFormat.timeFormat('%d/%m/%Y %H:%M');
+
+    div.html(formatTime(d.x) + '<br/>' + d.y)
+      ;
   }
 
 }

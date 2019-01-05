@@ -26,7 +26,7 @@ export class Dimensions {
     /**
     * Margins between border of SVG element and chart, axis or whatever
     */
-   margins: Margins;
+    margins: Margins;
 }
 
 export class Axis {
@@ -56,23 +56,55 @@ export class MinMaxValues<T> {
     max: T;
 }
 
-export class SeriesValues extends Array<SerieValues> {}
+export class SeriesValues extends Array<SerieValues> { }
 
-export class SerieValues extends Array<SerieValue> {}
+export class SerieValues extends Array<SerieValue> { }
 
 export class SerieValue {
     x: any;
     y: number;
-}
-export class SeriesHeaders extends Array<SerieHeader> {
+    /**
+     * Data injected in DotConfig.colorHex function to determine dot color.
+     * Can be anything provided colorHex function handles it
+     */
+    dotConfigData?: any;
 }
 
-export class SerieHeader {
+export class DotConfig {
+
+    /**
+     * Returns dot color as an hexadecimal string prefixed with #
+     * @param data The object that will be used to determine dot color
+     */
+    colorHex?: (data: any) => string;
+    /**
+     * Action on hover
+     */
+    hover?: (data: any) => void;
+    /**
+     * action on left click
+     */
+    click?: () => void;
+    /**
+     * Action on right click
+     */
+    rightClick?: () => void;
+
+    /**
+     * Diameter in px
+     */
+    diameter = 2;
+}
+export class SeriesHeaders extends Array<SerieHeader> {
+}
+
+export class SerieHeader {
     id: number;
     axis: number;
     color: string;
     line: LineType;
     maxPoints?: number;
+    dotConfig?: DotConfig;
 }
 
 export enum LineType {

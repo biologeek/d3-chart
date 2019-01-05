@@ -1,3 +1,4 @@
+<div app-dot-tooltip class="tooltip" style="opacity: 0;"></div>
 <svg [attr.height.px]="_dimensions.height" [attr.width.px]="_dimensions.width">
   <g id="chart">
     <g app-x-axis [xAxisConfig]="_xAxis" [data]="_data" [autoScale]="_autoScale.x" [chartDimensions]="_dimensions"
@@ -11,6 +12,8 @@
       [yAxis]="curve.y" [attr.height.px]="_dimensions.height" [attr.width.px]="_dimensions.width"
       [serie]="i">
     </g>
+    <g *ngFor="let curve of _data.series" app-curve-dots-set id="dot-set-{{curve.header.id}}"
+    [attr.height.px]="_dimensions.height" [attr.width.px]="_dimensions.width" [data]="curve"></g>
     <g app-clip-path [dimensions]="_dimensions" id="clip">
     </g>
   </g>

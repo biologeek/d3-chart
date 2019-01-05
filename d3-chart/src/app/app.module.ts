@@ -9,6 +9,7 @@ import { CurveComponent } from './curve/curve.component';
 import { ClipPathComponent } from './clip-path/clip-path.component';
 import { CurveDotComponent } from './curve-dot/curve-dot.component';
 import { CurveDotsSetComponent } from './curve-dots-set/curve-dots-set.component';
+import { DotTooltipComponent } from './dot-tooltip/dot-tooltip.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { CurveDotsSetComponent } from './curve-dots-set/curve-dots-set.component
     CurveComponent,
     ClipPathComponent,
     CurveDotComponent,
-    CurveDotsSetComponent
+    CurveDotsSetComponent,
+    DotTooltipComponent
   ],
   imports: [
     BrowserModule
