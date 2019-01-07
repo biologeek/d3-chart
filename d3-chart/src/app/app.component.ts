@@ -36,11 +36,11 @@ export class AppComponent implements OnInit {
     this.chartConfig = {
       dimensions: {
         height: 500,
-        width: 900,
+        width: 1000,
         margins: {
           left: 100,
-          right: 10,
-          top: 50,
+          right: 100,
+          top: 30,
           bottom: 80
         }
       },
@@ -89,25 +89,67 @@ export class AppComponent implements OnInit {
           [
             {
               x: 500000,
-              y: 10
+              y: 10,
+              dotConfigData: {
+                normality: {id: 1, label: 'Normal'},
+                validity: {id: 1, label: 'Valide'},
+                reconstitution: {id: 1, label: 'Non reconstituée'},
+                coherence: {id: 1, label: 'Cohérente'}
+              }
             }, {
               x: 501000,
-              y: 20
+              y: 20,
+              dotConfigData: {
+                normality: {id: 1, label: 'Normal'},
+                validity: {id: 1, label: 'Valide'},
+                reconstitution: {id: 1, label: 'Non reconstituée'},
+                coherence: {id: 1, label: 'Cohérente'}
+              }
             }, {
               x: 502000,
-              y: 10
+              y: 10,
+              dotConfigData: {
+                normality: {id: 1, label: 'Normal'},
+                validity: {id: 1, label: 'Valide'},
+                reconstitution: {id: 1, label: 'Non reconstituée'},
+                coherence: {id: 1, label: 'Cohérente'}
+              }
             }, {
               x: 503000,
-              y: 15
+              y: 15,
+              dotConfigData: {
+                normality: {id: 1, label: 'Normal'},
+                validity: {id: 1, label: 'Valide'},
+                reconstitution: {id: 1, label: 'Non reconstituée'},
+                coherence: {id: 1, label: 'Cohérente'}
+              }
             }, {
               x: 504000,
-              y: 50
+              y: 50,
+              dotConfigData: {
+                normality: null,
+                validity: {id: 1, label: 'Valide'},
+                reconstitution: {id: 1, label: 'Non reconstituée'},
+                coherence: {id: 1, label: 'Cohérente'}
+              }
             }, {
               x: 505000,
-              y: 15
+              y: 15,
+              dotConfigData: {
+                normality: {id: 1, label: 'Normal'},
+                validity: {id: 1, label: 'Valide'},
+                reconstitution: null,
+                coherence: {id: 1, label: 'Cohérente'}
+              }
             }, {
               x: 506000,
-              y: 1
+              y: 1,
+              dotConfigData: {
+                normality: {id: 1, label: 'Normal'},
+                validity: {id: 1, label: 'Valide'},
+                reconstitution: {id: 1, label: 'Non reconstituée'},
+                coherence: {id: 1, label: 'Cohérente'}
+              }
             }
           ]
       }]
@@ -121,7 +163,12 @@ export class AppComponent implements OnInit {
       newObj.series[0].values.push({
         x: 500000 + 10000 * i,
         y: Math.random() * 200,
-        dotConfigData: Math.random() * 200
+        dotConfigData: {
+          normality: {id: 1, label: 'Normal'},
+          validity: {id: 1, label: 'Valide'},
+          reconstitution: {id: 1, label: 'Non reconstituée'},
+          coherence: {id: 1, label: 'Cohérente'}
+        }
       });
       this.chartData = newObj;
      /* newConfig.xAxis.max = 100 + 10 * i;

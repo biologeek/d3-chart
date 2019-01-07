@@ -29,7 +29,7 @@ export class ChartComponent implements OnInit, OnChanges {
   xAxis: Axis;
   /**
    * Possibility to have several Y axes in the same chart and assign a curve or a set of points to a specific axis.
-   * 
+   * <br>
    * This will be useful for updating only paths or dots sets attached to the modified axis.
    */
   @Input()
@@ -99,13 +99,9 @@ export class ChartComponent implements OnInit, OnChanges {
     // console.log(this._data);
 
     d3Selection.select('#chart')
-      .attr('transform', `translate(${this.dimensions.margins.left},
-        ${this.dimensions.margins.right})`)
       .attr('width', this.dimensions.width -
         this.dimensions.margins.left - this.dimensions.margins.right)
       .attr('height', this.dimensions.height -
         this.dimensions.margins.top - this.dimensions.margins.bottom);
   }
-
-
 }

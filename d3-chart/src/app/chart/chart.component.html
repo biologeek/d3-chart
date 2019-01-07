@@ -2,19 +2,20 @@
 <svg [attr.height.px]="_dimensions.height" [attr.width.px]="_dimensions.width">
   <g id="chart">
     <g app-x-axis [xAxisConfig]="_xAxis" [data]="_data" [autoScale]="_autoScale.x" [chartDimensions]="_dimensions"
-      [attr.height.px]="_dimensions.height" [attr.width.px]="_dimensions.width">
+      >
     </g>
     <g *ngFor="let axis of _yAxes; let i = index" app-y-axis [autoScale]="_autoScale.y" [yAxisConfig]="axis"
-      [chartDimensions]="_dimensions" [axisNumber]="i" [attr.height.px]="_dimensions.height" [data]="_data"
-      [attr.width.px]="_dimensions.width">
+      [chartDimensions]="_dimensions" [axisNumber]="i" [data]="_data">
     </g>
     <g *ngFor="let curve of _data.series; let i = index" app-curve id="path-{{curve.header.id}}" [data]="curve" [xAxis]="_xAxis"
-      [yAxis]="curve.y" [attr.height.px]="_dimensions.height" [attr.width.px]="_dimensions.width"
+      [yAxis]="curve.y"
       [serie]="i">
     </g>
     <g *ngFor="let curve of _data.series" app-curve-dots-set id="dot-set-{{curve.header.id}}"
-    [attr.height.px]="_dimensions.height" [attr.width.px]="_dimensions.width" [data]="curve"></g>
+     [data]="curve"></g>
     <g app-clip-path [dimensions]="_dimensions" id="clip">
     </g>
+    <g app-brush-x class="brush brush-x" [xAxisConfig]="_xAxis" [data]="_data" [chartDimensions]="_dimensions"
+    ></g>
   </g>
 </svg>

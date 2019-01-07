@@ -21,6 +21,7 @@ import * as d3Transition from 'd3-transition';
   [attr.fill]="_data.header.dotConfig.colorHex(dot.dotConfigData)"
   (click)='onClickDot(i)'
   (mouseover)="onMouseOverDot(i, $event)"
+  (mouseleave)="onMouseLeave()"
   ></svg:circle>`,
   styleUrls: ['./curve-dots-set.component.css']
 })
@@ -28,6 +29,9 @@ export class CurveDotsSetComponent implements OnInit, OnChanges {
 
   @Input()
   data: Serie;
+
+  @Input()
+  tooltip: string;
 
   _data: Serie;
 
@@ -75,6 +79,10 @@ export class CurveDotsSetComponent implements OnInit, OnChanges {
     // this._data.header.dotConfig.hover(this._data.values[i]);
   }
 
+
+  onMouseLeave() {
+    d3Selection.select('[app-dot-tooltip]').style('opacity', '0');
+  }
   /**
    * When user clicks a dot on the chart, it must be highlighted along with other dots sharing same abscissa
    * @param i position of dot in _data.values
@@ -96,8 +104,14 @@ export class CurveDotsSetComponent implements OnInit, OnChanges {
 
     const formatTime = d3TimeFormat.timeFormat('%d/%m/%Y %H:%M');
 
-    div.html(formatTime(d.x) + '<br/>' + d.y)
-      ;
+    div.html(`Date : ${formatTime(d.x)}
+    <br/>Valeur : ${d.y}
+    <br/><hr/>
+    Qualifications : <br/> <br/>
+    Normalité : <b>${d.dotConfigData.normality ? d.dotConfigData.normality.label : 'ø'} </b><br/>
+    Validité : <b>${d.dotConfigData.validity ? d.dotConfigData.validity.label : 'ø'} </b><br/>
+    Reconstitution : <b>${d.dotConfigData.reconstitution ? d.dotConfigData.reconstitution.label : 'ø'} </b> <br/>
+    Cohérence : <b>${d.dotConfigData.coherence ? d.dotConfigData.coherence.label : 'ø'} </b>`);
   }
 
 }
