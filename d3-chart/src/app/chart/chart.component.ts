@@ -82,10 +82,10 @@ export class ChartComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this._dimensions = this.dimensions;
-    this._xAxis = this.xAxis;
-    this._yAxes = this.yAxes;
-    this._data = this.data;
+    this._dimensions = Object.assign({}, this.dimensions);
+    this._xAxis = Object.assign({}, this.xAxis);
+    this._yAxes = Object.assign({}, this.yAxes);
+    this._data = Object.assign({}, this.data);
     if (this.autoScale) {
       this._autoScale = this.autoScale;
     } else {
@@ -103,5 +103,15 @@ export class ChartComponent implements OnInit, OnChanges {
         this.dimensions.margins.left - this.dimensions.margins.right)
       .attr('height', this.dimensions.height -
         this.dimensions.margins.top - this.dimensions.margins.bottom);
+  }
+
+
+
+  onBrushXChange($brushRange) {
+    this._xAxis.min = $brushRange[0];
+    this._xAxis.max = $brushRange[1];
+
+
+    this._xAxis = Object.assign({}, this._xAxis);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Dimensions, Series, Axis } from '../model/chart-params';
 
 import * as d3Selection from 'd3-selection';
@@ -23,6 +23,9 @@ export class BrushXComponent implements OnInit {
 
   @Input()
   chartDimensions: Dimensions;
+
+  @Output()
+  brushXChange: EventEmitter<any> = new EventEmitter();
 
   brush: any;
 
@@ -50,17 +53,18 @@ export class BrushXComponent implements OnInit {
       .extent([
         [this._chartDimensions.margins.left, this._chartDimensions.height - 30],
         [this._chartDimensions.width - this._chartDimensions.margins.right, this._chartDimensions.height]
-      ]);
+      ]).on('end', (d, i) => this.onBrushEnd());
 
       console.log(d3Selection.select('g[app-brush-x]'));
       console.log(this.brush);
     d3Selection.select('g[app-brush-x]')
-      .call(this.brush)
-      .on("brush end", (d, i) => this.onBrushEnd());
+      .call(this.brush);
   }
 
   onBrushEnd() {
-    console.log(d3Event);
+    const sel = d3Event.event.selection;
+    console.log(sel.map(this._xAxisConfig.function.invert));
+    this.brushXChange.emit(sel.map(this._xAxisConfig.function.invert));
   }
 
 }

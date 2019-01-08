@@ -22,15 +22,11 @@ export class AppComponent implements OnInit {
 
     const axisX = {
       id: 1,
-      label: 'Date',
-      max: 100,
-      min: 0
+      label: 'Date'
     };
     const axisY = {
       id: 1,
       label: 'Axe 1',
-      max: 100,
-      min: 0
     };
 
     this.chartConfig = {
@@ -88,7 +84,7 @@ export class AppComponent implements OnInit {
         values:
           [
             {
-              x: 500000,
+              x: new Date(5000000),
               y: 10,
               dotConfigData: {
                 normality: {id: 1, label: 'Normal'},
@@ -97,7 +93,7 @@ export class AppComponent implements OnInit {
                 coherence: {id: 1, label: 'Cohérente'}
               }
             }, {
-              x: 501000,
+              x: new Date(5010000),
               y: 20,
               dotConfigData: {
                 normality: {id: 1, label: 'Normal'},
@@ -106,7 +102,7 @@ export class AppComponent implements OnInit {
                 coherence: {id: 1, label: 'Cohérente'}
               }
             }, {
-              x: 502000,
+              x: new Date(5020000),
               y: 10,
               dotConfigData: {
                 normality: {id: 1, label: 'Normal'},
@@ -115,7 +111,7 @@ export class AppComponent implements OnInit {
                 coherence: {id: 1, label: 'Cohérente'}
               }
             }, {
-              x: 503000,
+              x: new Date(5030000),
               y: 15,
               dotConfigData: {
                 normality: {id: 1, label: 'Normal'},
@@ -124,7 +120,7 @@ export class AppComponent implements OnInit {
                 coherence: {id: 1, label: 'Cohérente'}
               }
             }, {
-              x: 504000,
+              x: new Date(5040000),
               y: 50,
               dotConfigData: {
                 normality: null,
@@ -133,7 +129,7 @@ export class AppComponent implements OnInit {
                 coherence: {id: 1, label: 'Cohérente'}
               }
             }, {
-              x: 505000,
+              x: new Date(5050000),
               y: 15,
               dotConfigData: {
                 normality: {id: 1, label: 'Normal'},
@@ -142,7 +138,7 @@ export class AppComponent implements OnInit {
                 coherence: {id: 1, label: 'Cohérente'}
               }
             }, {
-              x: 506000,
+              x: new Date(5060000),
               y: 1,
               dotConfigData: {
                 normality: {id: 1, label: 'Normal'},
@@ -161,7 +157,7 @@ export class AppComponent implements OnInit {
       const newConfig: ChartConfiguration = _.cloneDeep(this.chartConfig);
 
       newObj.series[0].values.push({
-        x: 500000 + 10000 * i,
+        x: new Date(6000000 + 100000 * i),
         y: Math.random() * 200,
         dotConfigData: {
           normality: {id: 1, label: 'Normal'},

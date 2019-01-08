@@ -32,9 +32,9 @@ export class Dimensions {
 export class Axis {
     id: number;
     label: string;
-    min: any;
-    max: any;
-    function?: Function;
+    min?: any;
+    max?: any;
+    function?: any;
 }
 
 export class Series {

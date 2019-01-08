@@ -63,7 +63,7 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
       .range([this._chartDimensions.margins.left,
       this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
 
-    if (this.autoScale) {
+    if (this.autoScale && !(this._xAxisConfig.max || this._xAxisConfig.min)) {
       this.x.domain(d3Array.extent([].concat(this.data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
     } else {
       this.x.domain([new Date(this._xAxisConfig.min), new Date(this._xAxisConfig.max)]);
@@ -82,7 +82,7 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
       .call(
         d3Axis.axisBottom(this.x)
           .ticks(10)
-          .tickFormat(d3TimeFormat.timeFormat('%d/%m/%Y %H:%M'))
+          .tickFormat(d3TimeFormat.timeFormat('%d/%m/%Y %H:%M:%S'))
       ).selectAll('text')
       .attr('fill', 'black')
       .attr('transform', 'rotate(-45)')
