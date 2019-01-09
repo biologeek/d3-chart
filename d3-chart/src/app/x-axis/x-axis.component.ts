@@ -72,6 +72,8 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
     this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
     this._xAxisConfig.function = this.x;
     this.generateAxis();
+
+    this._xAxisConfig = Object.assign({}, this._xAxisConfig);
   }
 
   generateAxis() {

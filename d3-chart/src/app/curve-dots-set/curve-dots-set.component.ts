@@ -33,6 +33,7 @@ export class CurveDotsSetComponent implements OnInit, OnChanges {
   @Input()
   tooltip: string;
 
+
   _data: Serie;
 
   constructor() { }

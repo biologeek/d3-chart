@@ -75,7 +75,10 @@ export class ChartComponent implements OnInit, OnChanges {
     if (changes.autoScale) {
       this._autoScale = changes.autoScale.currentValue;
     }
-    
+    this._data.series.map(serie => {
+      serie.x = this._xAxis;
+      serie.y = this._yAxes[serie.header.axis];
+    })
     // console.log(this._xAxis);
     // console.log(this._yAxes);
     // console.log(this._dimensions);
@@ -109,9 +112,9 @@ export class ChartComponent implements OnInit, OnChanges {
 
 
   onBrushXChange($brushRange) {
-    this._xAxis.min = $brushRange[0];
+/*    this._xAxis.min = $brushRange[0];
     this._xAxis.max = $brushRange[1];
     // Change reference to trigger change event
     this._xAxis = Object.assign({}, this._xAxis);
-  }
+  */}
 }

@@ -62,9 +62,9 @@ export class BrushXComponent implements OnInit {
   }
 
   onBrushEnd() {
-    const sel = d3Event.event.selection;
+   /* const sel = d3Event.event.selection;
     console.log(sel.map(this._xAxisConfig.function.invert));
-    this.brushXChange.emit(sel.map(this._xAxisConfig.function.invert));
+    this.brushXChange.emit(sel.map(this._xAxisConfig.function.invert));*/
   }
 
 }
