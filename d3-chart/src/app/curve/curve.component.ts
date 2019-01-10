@@ -9,7 +9,7 @@ import { Series, Axis, Serie, LineType, SerieValues } from '../model/chart-param
   template: `<svg:path class="line"></svg:path>`,
   styleUrls: ['./curve.component.css']
 })
-export class CurveComponent implements AfterViewInit, OnChanges {
+export class CurveComponent implements OnChanges {
 
   @Input()
   data: Serie;
@@ -29,16 +29,6 @@ export class CurveComponent implements AfterViewInit, OnChanges {
 
   constructor() { }
 
-  ngAfterViewInit() {
-    this._data = this.data;
-    this._xAxis = this.xAxis;
-    this._yAxis = this.yAxis;
-    this.defineLine();
-    this.drawLine();
-    // console.log(this._xAxis);
-    // console.log(this._yAxis);
-    // console.log(this._data);
-  }
   ngOnChanges(changes: SimpleChanges) {
     this._data = changes.data.currentValue;
     this._xAxis = changes.xAxis.currentValue;

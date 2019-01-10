@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, AfterViewInit, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter, OnInit } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
@@ -11,7 +11,7 @@ import { Axis, Dimensions, Series, Serie } from '../model/chart-params';
   templateUrl: './y-axis.component.html',
   styleUrls: ['./y-axis.component.css']
 })
-export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
+export class YAxisComponent implements OnChanges, OnDestroy, OnInit {
 
   @Input()
   yAxisConfig: Axis;
@@ -44,7 +44,7 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   constructor() { }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this._data = this.data;
     this._autoScale = this.autoScale;
     this._chartDimensions = this.chartDimensions;

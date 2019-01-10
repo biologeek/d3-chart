@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 
 import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
@@ -27,6 +27,10 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
   @Input()
   chartDimensions: Dimensions;
 
+
+  @Output()
+  xAxisBuilt: EventEmitter<boolean> = new EventEmitter();
+
   /**
    * Internal implementation
    */
@@ -46,7 +50,7 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
     if (changes.chartDimensions) {
       this._chartDimensions = changes.chartDimensions.currentValue;
     }
-    if (changes.xAxisConfig) {
+    if (changes.xAxisConfig && changes.xAxisConfig.currentValue !== this._xAxisConfig) {
       this._xAxisConfig = changes.xAxisConfig.currentValue;
     }
     if (changes.data) {
@@ -64,7 +68,7 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
       this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
 
     if (this.autoScale && !(this._xAxisConfig.max || this._xAxisConfig.min)) {
-      this.x.domain(d3Array.extent([].concat(this.data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
+      this.x.domain(d3Array.extent([].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
     } else {
       this.x.domain([new Date(this._xAxisConfig.min), new Date(this._xAxisConfig.max)]);
     }
@@ -72,8 +76,8 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
     this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
     this._xAxisConfig.function = this.x;
     this.generateAxis();
-
     this._xAxisConfig = Object.assign({}, this._xAxisConfig);
+    this.xAxisBuilt.emit(true);
   }
 
   generateAxis() {

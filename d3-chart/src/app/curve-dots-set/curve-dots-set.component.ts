@@ -25,7 +25,7 @@ import * as d3Transition from 'd3-transition';
   ></svg:circle>`,
   styleUrls: ['./curve-dots-set.component.css']
 })
-export class CurveDotsSetComponent implements OnInit, OnChanges {
+export class CurveDotsSetComponent implements OnChanges {
 
   @Input()
   data: Serie;
@@ -37,11 +37,6 @@ export class CurveDotsSetComponent implements OnInit, OnChanges {
   _data: Serie;
 
   constructor() { }
-
-  ngOnInit() {
-    this._data = this.data;
-    this.updateDots();
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data) {

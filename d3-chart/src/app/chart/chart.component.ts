@@ -52,9 +52,10 @@ export class ChartComponent implements OnInit, OnChanges {
    */
   _autoScale: AutoScale;
   _xAxis: Axis;
-  _yAxes: Axis[];
+  _yAxes: Axis[] = [];
   _dimensions: Dimensions;
   _data: Series;
+  _axesReady: boolean[] = [false, false];
 
 
   constructor() { }
@@ -78,7 +79,7 @@ export class ChartComponent implements OnInit, OnChanges {
     this._data.series.map(serie => {
       serie.x = this._xAxis;
       serie.y = this._yAxes[serie.header.axis];
-    })
+    });
     // console.log(this._xAxis);
     // console.log(this._yAxes);
     // console.log(this._dimensions);
@@ -88,7 +89,7 @@ export class ChartComponent implements OnInit, OnChanges {
   ngOnInit() {
     this._dimensions = Object.assign({}, this.dimensions);
     this._xAxis = Object.assign({}, this.xAxis);
-    this._yAxes = Object.assign({}, this.yAxes);
+    this._yAxes = this.yAxes.slice();
     this._data = Object.assign({}, this.data);
     if (this.autoScale) {
       this._autoScale = this.autoScale;
@@ -107,6 +108,13 @@ export class ChartComponent implements OnInit, OnChanges {
         this.dimensions.margins.left - this.dimensions.margins.right)
       .attr('height', this.dimensions.height -
         this.dimensions.margins.top - this.dimensions.margins.bottom);
+  }
+
+
+  onXAxisChange(event) {
+    console.log(event);
+    this._axesReady[0] = event;
+    console.log(this._xAxis);
   }
 
 
