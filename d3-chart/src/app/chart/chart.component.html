@@ -4,14 +4,15 @@
     <g app-x-axis [xAxisConfig]="_xAxis" (xAxisBuilt)="onXAxisChange($event)" [data]="_data" [autoScale]="_autoScale.x"
       [chartDimensions]="_dimensions">
     </g>
-    <g *ngFor="let axis of _yAxes; let i = index" app-y-axis [autoScale]="_autoScale.y" [yAxisConfig]="axis"
+    <g *ngFor="let axis of _yAxes; let i = index" app-y-axis id="y-axis-{{i}}" [autoScale]="_autoScale.y" [yAxisConfig]="axis"
       [chartDimensions]="_dimensions" [axisNumber]="i" [data]="_data">
     </g>
     <g *ngIf="_axesReady[0]">
       <g *ngFor="let curve of _data.series; let i = index" app-curve id="path-{{curve.header.id}}" [data]="curve"
         [xAxis]="_xAxis" [yAxis]="curve.y" [serie]="i">
       </g>
-      <g *ngFor="let curve of _data.series" app-curve-dots-set id="dot-set-{{curve.header.id}}" [data]="curve"></g>
+      <g *ngFor="let curve of _data.series" app-curve-dots-set id="dot-set-{{curve.header.id}}" [data]="curve" [xAxis]="_xAxis"
+        [yAxis]="curve.y"></g>
       <g app-clip-path [dimensions]="_dimensions" id="clip">
       </g>
       <g app-brush-x class="brush brush-x" [xAxisConfig]="_xAxis" [data]="_data" [chartDimensions]="_dimensions"></g>

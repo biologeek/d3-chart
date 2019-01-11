@@ -9,7 +9,7 @@ import { Series, Axis, Serie, LineType, SerieValues } from '../model/chart-param
   template: `<svg:path class="line"></svg:path>`,
   styleUrls: ['./curve.component.css']
 })
-export class CurveComponent implements OnChanges {
+export class CurveComponent implements OnChanges, AfterViewInit {
 
   @Input()
   data: Serie;
@@ -29,15 +29,23 @@ export class CurveComponent implements OnChanges {
 
   constructor() { }
 
+  ngAfterViewInit() {
+    this._data = this.data;
+    this._xAxis = this.xAxis;
+    this._yAxis = this.yAxis;
+    this.defineLine();
+    this.drawLine();
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     this._data = changes.data.currentValue;
     this._xAxis = changes.xAxis.currentValue;
     this._yAxis = changes.yAxis.currentValue;
     this.defineLine();
     this.drawLine();
-    // // console.log(this._xAxis);
-    // // console.log(this._yAxis);
-    // // console.log(this._data);
+    console.log(this._xAxis);
+    console.log(this._yAxis);
+    console.log(this._data);
   }
 
   defineLine() {
@@ -45,11 +53,11 @@ export class CurveComponent implements OnChanges {
       if (this._xAxis.function && this._yAxis.function) {
         this.line = d3Shape.line()//
           .x(d => {
-            // console.log('X ' + this._xAxis.function(d.x));
+            console.log('X ' + this._xAxis.function(d.x));
             return this._xAxis.function(d.x);
           })//
           .y(d => {
-            // console.log('y ' + d.y);
+            console.log('y ' + d.y);
             return this._yAxis.function(d.y);
           });
       }
@@ -58,22 +66,25 @@ export class CurveComponent implements OnChanges {
 
   drawLine() {
     if (this.line) {
-      // console.log(this._data.values);
-      if (this._data.values.length > this._data.header.maxPoints) {
+      console.log(this.line);
+
+      // Erases dots when they reach max number
+      if (this._data.header.maxPoints && this._data.values.length > this._data.header.maxPoints) {
         this._data.values = this._data.values.slice(Math.max(this._data.values.length - this._data.header.maxPoints, 1));
       }
       const path = d3Selection.select(`#path-${this._data.header.id} path`)
         .datum(this._data.values)
+        .transition().duration(750)
         .attr('clip-path', 'url(#clip)')
         .attr('fill', 'none')
         .attr('stroke', this._data.header.color)
         .attr('d', this.line);
 
-        if (this._data.header.line === LineType.DASHED) {
-          path.style('stroke-dasharray', ('6, 6'));
-        } else if (this._data.header.line === LineType.DOTTED) {
-          path.style('stroke-dasharray', ('2, 2'));
-        }
+      if (this._data.header.line === LineType.DASHED) {
+        path.style('stroke-dasharray', ('6, 6'));
+      } else if (this._data.header.line === LineType.DOTTED) {
+        path.style('stroke-dasharray', ('2, 2'));
+      }
     }
   }
 }

@@ -81,6 +81,7 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
   }
 
   generateAxis() {
+    console.log(d3Selection.select('[app-x-axis]'));
     d3Selection.select('[app-x-axis]')
       .attr('transform', `translate(0, ${this._chartDimensions.height
         - this._chartDimensions.margins.bottom})`)

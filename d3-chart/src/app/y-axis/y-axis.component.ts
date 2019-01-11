@@ -11,7 +11,7 @@ import { Axis, Dimensions, Series, Serie } from '../model/chart-params';
   templateUrl: './y-axis.component.html',
   styleUrls: ['./y-axis.component.css']
 })
-export class YAxisComponent implements OnChanges, OnDestroy, OnInit {
+export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   @Input()
   yAxisConfig: Axis;
@@ -44,7 +44,7 @@ export class YAxisComponent implements OnChanges, OnDestroy, OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this._data = this.data;
     this._autoScale = this.autoScale;
     this._chartDimensions = this.chartDimensions;
@@ -81,33 +81,35 @@ export class YAxisComponent implements OnChanges, OnDestroy, OnInit {
       if (this._autoScale) {
         const boundCurves: number[] = [].concat(
           this._data.series
-          .filter(s => s.header.axis === this.axisNumber)
-          .map(s => s.values.map(t => t.y))
-          )[0];
+            .filter(s => s.header.axis === this.axisNumber)
+            .map(s => s.values.map(t => t.y))
+        )[0];
         this.y.domain([Math.min(...boundCurves), Math.max(...boundCurves)]);
       } else {
         this.y.domain([this._yAxisConfig.min, this._yAxisConfig.max]);
       }
 
       this._yAxisConfig.function = this.y;
-      console.log(d3Selection.select(`g#y-axis-${this.axisNumber}`));
-      d3Selection.select(`g#y-axis-${this.axisNumber}`)
-        .attr('transform', 'translate('
-          + (this._chartDimensions.margins.left - this.axisNumber * 50)
-          + ', 0)')
-        .attr('stroke-width', 2)
-        .call(d3Axis.axisLeft(this.y))
-        .append('text')
-        .attr('transform', 'rotate(-45)')
-        .attr('y', 6)
-        .attr('dy', '1.5rem')
-        .attr('dx', '0.2rem')
-        .attr('fill', '#000')
-        .attr('font-size', '1rem')
-        .text(this._yAxisConfig.label);
+      this.buildAxis();
+      this._yAxisConfig = Object.assign({}, this._yAxisConfig);
     }
   }
 
+  buildAxis() {
+    console.log(d3Selection.select(`[app-y-axis] #y-axis-${this.axisNumber}`));
+    d3Selection.select(`#y-axis-${this.axisNumber}`)
+      .attr('transform', `translate(${this._chartDimensions.margins.left - this.axisNumber * 50}, 0)`)
+      .attr('stroke-width', 2)
+      .call(d3Axis.axisLeft(this.y))
+      .append('text')
+      .attr('transform', 'rotate(-45)')
+      .attr('y', 6)
+      .attr('dy', '1.5rem')
+      .attr('dx', '0.2rem')
+      .attr('fill', '#000')
+      .attr('font-size', '1rem')
+      .text(this._yAxisConfig.label);
+  }
   ngOnDestroy() {
   }
 

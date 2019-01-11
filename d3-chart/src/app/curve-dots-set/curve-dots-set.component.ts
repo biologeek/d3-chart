@@ -14,8 +14,8 @@ import * as d3Transition from 'd3-transition';
   template: `<svg:circle
   class='dot'
   *ngFor='let dot of _data.values; let i = index'
-  [attr.cx]='_data.x.function(dot.x)'
-  [attr.cy]='_data.y.function(dot.y)'
+  [attr.cx]='_xAxis.function(dot.x)'
+  [attr.cy]='_yAxis.function(dot.y)'
   id='dot-{{i}}'
   [attr.r]='_data.header.dotConfig.diameter'
   [attr.fill]="_data.header.dotConfig.colorHex(dot.dotConfigData)"
@@ -29,12 +29,20 @@ export class CurveDotsSetComponent implements OnChanges {
 
   @Input()
   data: Serie;
+  @Input()
+  xAxis: Axis;
+  @Input()
+  yAxis: Axis;
 
   @Input()
   tooltip: string;
 
-
   _data: Serie;
+  _xAxis: Axis;
+  _yAxis: Axis;
+  _tooltip: string;
+
+
 
   constructor() { }
 
@@ -43,10 +51,10 @@ export class CurveDotsSetComponent implements OnChanges {
       this._data = changes.data.currentValue;
     }
     if (changes.xAxis) {
-      this._data.x = changes.xAxis.currentValue;
+      this._xAxis = changes.xAxis.currentValue;
     }
     if (changes.yAxis) {
-      this._data.y = changes.yAxis.currentValue;
+      this._yAxis = changes.yAxis.currentValue;
     }
 
     this.updateDots();

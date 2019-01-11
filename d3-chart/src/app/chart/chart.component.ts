@@ -89,7 +89,7 @@ export class ChartComponent implements OnInit, OnChanges {
   ngOnInit() {
     this._dimensions = Object.assign({}, this.dimensions);
     this._xAxis = Object.assign({}, this.xAxis);
-    this._yAxes = this.yAxes.slice();
+    this._yAxes = this.yAxes;
     this._data = Object.assign({}, this.data);
     if (this.autoScale) {
       this._autoScale = this.autoScale;
