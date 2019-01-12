@@ -38,14 +38,20 @@ export class CurveComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.data) {
     this._data = changes.data.currentValue;
-    this._xAxis = changes.xAxis.currentValue;
-    this._yAxis = changes.yAxis.currentValue;
+    }
+    if (changes.xAxis) {
+      this._xAxis = changes.xAxis.currentValue;
+    }
+    if (changes.yAxis) {
+      this._yAxis = changes.yAxis.currentValue;
+    }
     this.defineLine();
     this.drawLine();
-    console.log(this._xAxis);
-    console.log(this._yAxis);
-    console.log(this._data);
+    // console.log(this._xAxis);
+    // console.log(this._yAxis);
+    // console.log(this._data);
   }
 
   defineLine() {
@@ -53,11 +59,11 @@ export class CurveComponent implements OnChanges, AfterViewInit {
       if (this._xAxis.function && this._yAxis.function) {
         this.line = d3Shape.line()//
           .x(d => {
-            console.log('X ' + this._xAxis.function(d.x));
+            // console.log('X ' + this._xAxis.function(d.x));
             return this._xAxis.function(d.x);
           })//
           .y(d => {
-            console.log('y ' + d.y);
+            // console.log('y ' + d.y);
             return this._yAxis.function(d.y);
           });
       }
@@ -66,7 +72,7 @@ export class CurveComponent implements OnChanges, AfterViewInit {
 
   drawLine() {
     if (this.line) {
-      console.log(this.line);
+      // console.log(this.line);
 
       // Erases dots when they reach max number
       if (this._data.header.maxPoints && this._data.values.length > this._data.header.maxPoints) {
@@ -74,7 +80,7 @@ export class CurveComponent implements OnChanges, AfterViewInit {
       }
       const path = d3Selection.select(`#path-${this._data.header.id} path`)
         .datum(this._data.values)
-        .transition().duration(750)
+        .transition().duration(400)
         .attr('clip-path', 'url(#clip)')
         .attr('fill', 'none')
         .attr('stroke', this._data.header.color)

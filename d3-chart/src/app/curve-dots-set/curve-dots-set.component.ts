@@ -16,6 +16,7 @@ import * as d3Transition from 'd3-transition';
   *ngFor='let dot of _data.values; let i = index'
   [attr.cx]='_xAxis.function(dot.x)'
   [attr.cy]='_yAxis.function(dot.y)'
+  clip-path="url(#clip)"
   id='dot-{{i}}'
   [attr.r]='_data.header.dotConfig.diameter'
   [attr.fill]="_data.header.dotConfig.colorHex(dot.dotConfigData)"

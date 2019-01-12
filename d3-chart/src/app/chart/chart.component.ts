@@ -56,6 +56,7 @@ export class ChartComponent implements OnInit, OnChanges {
   _dimensions: Dimensions;
   _data: Series;
   _axesReady: boolean[] = [false, false];
+  _brushPosition: any;
 
 
   constructor() { }
@@ -112,17 +113,20 @@ export class ChartComponent implements OnInit, OnChanges {
 
 
   onXAxisChange(event) {
-    console.log(event);
-    this._axesReady[0] = event;
-    console.log(this._xAxis);
+    // console.log(event);
+    this._axesReady[0] = true;
+    this._xAxis.function = event.function;
+    this._xAxis.max = event.max;
+    this._xAxis.min = event.min;
+
+    // console.log(this._xAxis);
   }
 
 
 
   onBrushXChange($brushRange) {
-/*    this._xAxis.min = $brushRange[0];
-    this._xAxis.max = $brushRange[1];
+    this._brushPosition = Object.assign({}, $brushRange);
     // Change reference to trigger change event
     this._xAxis = Object.assign({}, this._xAxis);
-  */}
+  }
 }

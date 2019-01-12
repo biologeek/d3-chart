@@ -70,8 +70,8 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   updateAxis() {
     if (this._chartDimensions && this._yAxisConfig) {
-      console.log('Updating yAxis ' + this.axisNumber);
-      console.log([this._yAxisConfig.min, this._yAxisConfig.max]);
+      // console.log('Updating yAxis ' + this.axisNumber);
+      // console.log([this._yAxisConfig.min, this._yAxisConfig.max]);
 
       this.y = d3Scale
         .scaleLinear()
@@ -96,7 +96,7 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
   }
 
   buildAxis() {
-    console.log(d3Selection.select(`[app-y-axis] #y-axis-${this.axisNumber}`));
+    // console.log(d3Selection.select(`[app-y-axis] #y-axis-${this.axisNumber}`));
     d3Selection.select(`#y-axis-${this.axisNumber}`)
       .attr('transform', `translate(${this._chartDimensions.margins.left - this.axisNumber * 50}, 0)`)
       .attr('stroke-width', 2)

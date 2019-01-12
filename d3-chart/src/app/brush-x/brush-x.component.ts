@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { Dimensions, Series, Axis } from '../model/chart-params';
 
 import * as d3Selection from 'd3-selection';
@@ -12,7 +12,7 @@ import * as d3Event from 'd3';
   template: '',
   styleUrls: ['./brush-x.component.css']
 })
-export class BrushXComponent implements OnInit {
+export class BrushXComponent implements OnInit, OnChanges {
 
 
   @Input()
@@ -47,6 +47,19 @@ export class BrushXComponent implements OnInit {
     this.initBrush();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.chartDimensions) {
+      this._chartDimensions = changes.chartDimensions.currentValue;
+    }
+    if (changes.xAxisConfig) {
+      this._xAxisConfig = changes.xAxisConfig.currentValue;
+    }
+    if (changes.data) {
+      this._data = changes.data.currentValue;
+    }
+    this.initBrush();
+  }
+
   initBrush() {
 
     this.brush = d3Brush.brushX()
@@ -55,16 +68,16 @@ export class BrushXComponent implements OnInit {
         [this._chartDimensions.width - this._chartDimensions.margins.right, this._chartDimensions.height]
       ]).on('end', (d, i) => this.onBrushEnd());
 
-      console.log(d3Selection.select('g[app-brush-x]'));
-      console.log(this.brush);
+      // console.log(d3Selection.select('g[app-brush-x]'));
+      // console.log(this.brush);
     d3Selection.select('g[app-brush-x]')
       .call(this.brush);
   }
 
   onBrushEnd() {
-   /* const sel = d3Event.event.selection;
-    console.log(sel.map(this._xAxisConfig.function.invert));
-    this.brushXChange.emit(sel.map(this._xAxisConfig.function.invert));*/
+    const sel = d3Event.event.selection;
+    console.log(sel);
+    this.brushXChange.emit(sel);
   }
 
 }
