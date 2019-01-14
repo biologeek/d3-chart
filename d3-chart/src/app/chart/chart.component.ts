@@ -53,6 +53,7 @@ export class ChartComponent implements OnInit, OnChanges {
   _autoScale: AutoScale;
   _xAxis: Axis;
   _yAxes: Axis[] = [];
+  _selectedYAxis: Axis = null;
   _dimensions: Dimensions;
   _data: Series;
   _axesReady: boolean[] = [false, false];
@@ -66,6 +67,7 @@ export class ChartComponent implements OnInit, OnChanges {
       this._dimensions = changes.dimensions.currentValue;
     }
     if (changes.xAxis) {
+      changes.xAxis.currentValue.updateOriginal = true;
       this._xAxis = changes.xAxis.currentValue;
     }
     if (changes.yAxes) {
@@ -126,7 +128,14 @@ export class ChartComponent implements OnInit, OnChanges {
 
   onBrushXChange($brushRange) {
     this._brushPosition = Object.assign({}, $brushRange);
+    this._xAxis.updateOriginal = false;
+
+    console.log([this._xAxis.function(this._brushPosition[0]), this._xAxis.function(this._brushPosition[1])]);
     // Change reference to trigger change event
     this._xAxis = Object.assign({}, this._xAxis);
+  }
+
+  onSelectAxis($axis) {
+    this._selectedYAxis = $axis;
   }
 }

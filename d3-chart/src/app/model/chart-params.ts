@@ -35,6 +35,7 @@ export class Axis {
     min?: any;
     max?: any;
     function?: any;
+    updateOriginal?: boolean;
 }
 
 export class Series {

@@ -5,7 +5,7 @@
       [chartDimensions]="_dimensions">
     </g>
     <g *ngFor="let axis of _yAxes; let i = index" app-y-axis id="y-axis-{{i}}" [autoScale]="_autoScale.y" [yAxisConfig]="axis"
-      [chartDimensions]="_dimensions" [axisNumber]="i" [data]="_data">
+      [chartDimensions]="_dimensions" [axisNumber]="i" [data]="_data" (click)="onSelectAxis(axis)">
     </g>
     <g *ngIf="_axesReady[0]">
       <g clip-path="url(#clip)" *ngFor="let curve of _data.series; let i = index" app-curve id="path-{{curve.header.id}}" [data]="curve"
@@ -16,6 +16,7 @@
       <g app-clip-path [dimensions]="_dimensions" id="clip">
       </g>
       <g app-brush-x class="brush brush-x" (brushXChange)="onBrushXChange($event)" [xAxisConfig]="_xAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
+      <g *ngIf="_selectedYAxis" app-brush-y class="brush brush-y" (brushYChange)="onBrushYChange($event)" [yAxisConfig]="_selectedYAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
     </g>
   </g>
 </svg>

@@ -30,7 +30,6 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
   @Input()
   chartDimensions: Dimensions;
 
-
   @Output()
   xAxisBuilt: EventEmitter<Axis> = new EventEmitter();
 
@@ -61,11 +60,19 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
     if (changes.data) {
       this._data = changes.data.currentValue;
     }
-
     if (changes.brushPosition) {
       this._brushPosition = changes.brushPosition.currentValue;
     }
+    if (!this._originalAxis || this._xAxisConfig.updateOriginal) {
+      this._originalAxis = Object.assign({}, this._xAxisConfig);
+    }
     this.buildAxis();
+
+
+    if (!this._originalAxis || this._xAxisConfig.updateOriginal) {
+      console.log('Not ignored !!');
+      this._xAxisConfig.updateOriginal = false;
+    }
   }
 
   ngOnDestroy() {
@@ -80,21 +87,26 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
 
     if (this.autoScale && !(this._brushPosition && (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound))) {
       this.x.domain(d3Array.extent([].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
-    } else {
+    } else if (this._brushPosition && (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound)) {
+      // console.log('YOUYOU' + [this._originalAxis.function.invert(this._brushPosition[0]),
+      // this._originalAxis.function.invert(this._brushPosition[1])]);
       this.x.domain([
         this._originalAxis.function.invert(this._brushPosition[0]),
         this._originalAxis.function.invert(this._brushPosition[1])
       ]);
+    } else {
+      this.x.domain([
+        this._xAxisConfig.min,
+        this._xAxisConfig.max
+      ]);
     }
-   // console.log([this._chartDimensions.margins.left,
+    // console.log([this._chartDimensions.margins.left,
     // this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left]);
     this._xAxisConfig.function = this.x;
     this.generateAxis();
 
-    if (!this._originalAxis) {
-      this._originalAxis = Object.assign({}, this._xAxisConfig);
-    }
     this._xAxisConfig = Object.assign({}, this._xAxisConfig);
+    // this._originalAxis = Object.assign({}, this._xAxisConfig);
     this.xAxisBuilt.emit(this._xAxisConfig);
   }
 

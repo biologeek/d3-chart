@@ -35,6 +35,7 @@ export class BrushXComponent implements OnInit, OnChanges {
   _chartDimensions: Dimensions;
   _xAxisConfig: Axis;
   _data: Series;
+  _firstMove = true;
 
   constructor() { }
 
@@ -61,23 +62,29 @@ export class BrushXComponent implements OnInit, OnChanges {
   }
 
   initBrush() {
-
     this.brush = d3Brush.brushX()
       .extent([
         [this._chartDimensions.margins.left, this._chartDimensions.height - 30],
-        [this._chartDimensions.width - this._chartDimensions.margins.right, this._chartDimensions.height]
+        [this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left
+          , this._chartDimensions.height]
       ]).on('end', (d, i) => this.onBrushEnd());
 
       // console.log(d3Selection.select('g[app-brush-x]'));
       // console.log(this.brush);
     d3Selection.select('g[app-brush-x]')
-      .call(this.brush);
+      .call(this.brush)
+      .call(this.brush.move, this._xAxisConfig.function.range());
   }
 
   onBrushEnd() {
+    if (!this._firstMove) {
     const sel = d3Event.event.selection;
     console.log(sel);
     this.brushXChange.emit(sel);
+    } else {
+      console.log('First move');
+      this._firstMove = false;
+    }
   }
 
 }
