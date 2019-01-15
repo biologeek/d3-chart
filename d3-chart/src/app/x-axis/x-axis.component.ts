@@ -80,20 +80,29 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
 
   buildAxis() {
 
+    if (this._originalAxis.function) {
+      this._originalAxis.function.domain(d3Array.extent([].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
+    }
+
     const leftBound = this._chartDimensions.margins.left;
     const rightBound = this._chartDimensions.width - this._chartDimensions.margins.right - this._chartDimensions.margins.left;
     this.x = d3Scale.scaleTime()
       .range([leftBound, rightBound]);
 
-    if (this.autoScale && !(this._brushPosition && (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound))) {
+    if (this.autoScale && !(this._brushPosition && this._originalAxis.function
+       /*&& (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound)*/)) {
+
       this.x.domain(d3Array.extent([].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
-    } else if (this._brushPosition && (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound)) {
-      // console.log('YOUYOU' + [this._originalAxis.function.invert(this._brushPosition[0]),
-      // this._originalAxis.function.invert(this._brushPosition[1])]);
+
+    } else if (this._brushPosition && this._originalAxis.function) {
+
+      console.log('YOUYOU' + [this._originalAxis.function.invert(this._brushPosition[0]),
+      this._originalAxis.function.invert(this._brushPosition[1])]);
       this.x.domain([
         this._originalAxis.function.invert(this._brushPosition[0]),
         this._originalAxis.function.invert(this._brushPosition[1])
       ]);
+
     } else {
       this.x.domain([
         this._xAxisConfig.min,

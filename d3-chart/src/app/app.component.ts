@@ -282,7 +282,7 @@ export class AppComponent implements OnInit {
       this.chartConfig = newConfig;
       console.log('Incrementing : i=' + i);
       i++;
-    }, 6000);
+    }, 600);
   }
 
 }
