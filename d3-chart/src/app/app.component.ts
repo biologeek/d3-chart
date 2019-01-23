@@ -36,8 +36,8 @@ export class AppComponent implements OnInit {
 
     this.chartConfig = {
       dimensions: {
-        height: 500,
-        width: 1000,
+        height: 800,
+        width: 2000,
         margins: {
           left: 130,
           right: 100,
@@ -65,7 +65,7 @@ export class AppComponent implements OnInit {
           id: 0,
           color: 'green',
           line: LineType.LINE,
-          maxPoints: 50,
+          maxPoints: 300,
           dotConfig: {
             click: () => {
               window.alert('Click');
@@ -74,9 +74,9 @@ export class AppComponent implements OnInit {
               window.alert('Right Click');
             },
             colorHex: (data: any) => {
-              return data > 40 ? '#000000' : '#ff0000';
+              return data > 0 ? '#000000' : '#ff0000';
             },
-            diameter: 5
+            diameter: 3
           }
         },
         x: axisX,
@@ -151,11 +151,11 @@ export class AppComponent implements OnInit {
       }, {
         header:
         {
-          axis: 1,
+          axis: 0,
           id: 1,
           color: 'blue',
           line: LineType.LINE,
-          maxPoints: 50,
+          maxPoints: 300,
           dotConfig: {
             click: () => {
               window.alert('Click');
@@ -164,13 +164,13 @@ export class AppComponent implements OnInit {
               window.alert('Right Click');
             },
             colorHex: (data: any) => {
-              return data > 40 ? '#000000' : '#ff0000';
+              return '#000000'; // : '#ff0000';
             },
             diameter: 3
           }
         },
         x: axisX,
-        y: axisY2,
+        y: axisY,
         values:
           [
             {
@@ -259,7 +259,7 @@ export class AppComponent implements OnInit {
 
       newObj.series[1].values.push({
         x: new Date(6000000 + 100000 * i),
-        y: Math.random() * 400,
+        y: Math.random() * 20000,
         dotConfigData: {
           normality: { id: 1, label: 'Normal' },
           validity: { id: 1, label: 'Valide' },
@@ -274,7 +274,7 @@ export class AppComponent implements OnInit {
       newObj.series[0].y = newConfig.yAxes[0];
 
       newObj.series[0].x = newConfig.xAxis;
-      newObj.series[1].y = newConfig.yAxes[1];
+      newObj.series[1].y = newConfig.yAxes[0];
 
       newObj.series[1].x = newConfig.xAxis;
 
@@ -282,7 +282,7 @@ export class AppComponent implements OnInit {
       this.chartConfig = newConfig;
       console.log('Incrementing : i=' + i);
       i++;
-    }, 600);
+    }, 6000);
   }
 
 }

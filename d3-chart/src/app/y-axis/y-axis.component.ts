@@ -4,6 +4,8 @@ import * as d3Selection from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Axis from 'd3-axis';
 import * as d3Array from 'd3-array';
+import * as _ from 'lodash';
+
 import { Axis, Dimensions, Series, Serie } from '../model/chart-params';
 
 @Component({
@@ -79,11 +81,13 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
           , this._chartDimensions.margins.bottom]);
 
       if (this._autoScale) {
-        const boundCurves: number[] = [].concat(
-          this._data.series
-            .filter(s => s.header.axis === this.axisNumber)
-            .map(s => s.values.map(t => t.y))
-        )[0];
+        const temp: Array<Array<any>> = this._data.series
+          .filter(s => s.header.axis === this.axisNumber)
+          .map(s => s.values.map(t => t.y));
+        console.log(_.flatten(temp));
+        const boundCurves: number[] = _.flatten(temp);
+        console.log(this._data.series
+          .filter(s => s.header.axis === this.axisNumber));
         this.y.domain([Math.min(...boundCurves), Math.max(...boundCurves)]);
       } else {
         this.y.domain([this._yAxisConfig.min, this._yAxisConfig.max]);
@@ -111,6 +115,17 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
       .text(this._yAxisConfig.label);
   }
   ngOnDestroy() {
+  }
+
+
+  concatTwoDimensionalArray(array) {
+    let res = [];
+    for (const x in array) {
+      if (array[x] instanceof Array) {
+        res = res.concat(array[x]);
+      }
+    }
+    return res;
   }
 
 }

@@ -5,6 +5,7 @@ import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
 import * as d3TimeFormat from 'd3-time-format';
+import * as _ from 'lodash';
 import { Axis, Dimensions, Series } from '../model/chart-params';
 
 @Component({
@@ -80,8 +81,11 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
 
   buildAxis() {
 
+    const temp: Array<any> = [].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))));
     if (this._originalAxis.function) {
-      this._originalAxis.function.domain(d3Array.extent([].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
+      console.log(temp[0].concat(temp[1]));
+      console.log(d3Array.extent(temp[0].concat(temp[1])));
+      this._originalAxis.function.domain(d3Array.extent(temp[0].concat(temp[1])));
     }
 
     const leftBound = this._chartDimensions.margins.left;
@@ -90,9 +94,9 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
       .range([leftBound, rightBound]);
 
     if (this.autoScale && !(this._brushPosition && this._originalAxis.function
-       /*&& (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound)*/)) {
+       && (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound))) {
 
-      this.x.domain(d3Array.extent([].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
+      this.x.domain(d3Array.extent(_.flatten(temp)));
 
     } else if (this._brushPosition && this._originalAxis.function) {
 
