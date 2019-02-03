@@ -16,7 +16,7 @@ export class BrushYComponent implements OnInit, OnChanges {
 
 
   @Input()
-  yAxisConfig: Axis;
+  yAxesConfig: Axis[];
 
   @Input()
   chartDimensions: Dimensions;
@@ -33,7 +33,7 @@ export class BrushYComponent implements OnInit, OnChanges {
    * Internal implementation
    */
   _chartDimensions: Dimensions;
-  _yAxisConfig: Axis;
+  _yAxesConfig: Axis[];
   _firstMove: boolean;
 
   constructor() { }
@@ -41,14 +41,14 @@ export class BrushYComponent implements OnInit, OnChanges {
   ngOnInit() {
 
     this._chartDimensions = this.chartDimensions;
-    this._yAxisConfig = this.yAxisConfig;
+    this._yAxesConfig = this.yAxesConfig;
 
     this.initBrush();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.yAxisConfig) {
-      this._yAxisConfig = changes.yAxisConfig.currentValue;
+    if (changes.yAxesConfig) {
+      this._yAxesConfig = changes.yAxesConfig.currentValue;
     }
     if (changes.chartDimensions) {
       this._chartDimensions = changes.chartDimensions.currentValue;
@@ -67,13 +67,13 @@ export class BrushYComponent implements OnInit, OnChanges {
     // console.log(this.brush);
     d3Selection.select('g[app-brush-y]')
       .call(this.brush)
-      .call(this.brush.move, this._yAxisConfig.function.range());
+      .call(this.brush.move, this._yAxesConfig[0].function.range());
       this._firstMove = true;
   }
 
 
   onBrushEnd() {
-    if (!this._firstMove) {
+    if (true){ // !this._firstMove) {
     const sel = d3Event.event.selection;
     console.log(sel);
     this.brushYChange.emit(sel);

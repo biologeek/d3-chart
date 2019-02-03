@@ -7,6 +7,23 @@ import { ChartConfiguration, Series, Dimensions, Axis, AutoScale } from '../mode
 /**
  * Represents a chart. Here are set up chart dimensions and margins from the configuration injected by caller.
  * Changes from components that trigger other components of the chart are handled here (eg brush modification, ...)
+ * 
+ * To feed and customize yoir chart, you may use these inputs : 
+ * 
+ * [dimesions] : a Dimensions object containing width, height and margins as an array [left, right, top, bottom], all in px
+ * 
+ * [xAxis] : an Axis object containing necesary parameters for building an axis : min and max or autoscaling,
+ * an ID, a label displayed on top and the D3 function of the axis (kind of a value to position converter)
+ * 
+ * [yAxes] : an array of Axis, almost the same as for X axis. Except we have 1 object per Y axis (as we can
+ * have different scales and types of data)
+ * 
+ * [data] : an array of Serie, contains curve specific parameters (color, dashed or dotted, click event handler, ...) 
+ * and data serie as an array of {x, y}
+ * 
+ * [autoscale] : Is autoscaling turned on on X and/or Y axes
+ * 
+ * (selectAbscissa) : when user selects a dot, returns all {serieId, f(x)} couples for displayed curves.
  */
 @Component({
   selector: 'app-chart',
@@ -63,10 +80,15 @@ export class ChartComponent implements OnInit, OnChanges {
   _data: Series;
   _axesReady: boolean[] = [false, false];
   _brushPosition: any;
+  _yBrushPosition: number[];
 
 
   constructor() { }
 
+  /**
+   * OnChange of any of the inputs, rebuilds necesary components
+   * @param changes changes triggered by user
+   */
   ngOnChanges(changes: SimpleChanges) {
     if (changes.dimensions) {
       this._dimensions = changes.dimensions.currentValue;
@@ -130,6 +152,16 @@ export class ChartComponent implements OnInit, OnChanges {
   }
 
 
+  onYAxisChange($event) {
+    const idx = this._yAxes.findIndex(t => t.id === $event.id);
+    this._yAxes[idx].function = $event.function;
+    this._yAxes[idx].max = $event.max;
+    this._yAxes[idx].min = $event.min;
+    this._yAxes.map(d => Object.assign({}, d));
+
+  }
+
+
 
   onBrushXChange($brushRange) {
     this._brushPosition = $brushRange;
@@ -138,6 +170,18 @@ export class ChartComponent implements OnInit, OnChanges {
     console.log([this._xAxis.function.invert(this._brushPosition[0]), this._xAxis.function.invert(this._brushPosition[1])]);
     // Change reference to trigger change event
     this._xAxis = Object.assign({}, this._xAxis);
+  }
+
+  /**
+   * Update _yBrushPosition variable to update Y axes
+   * 
+   * @param $event brush range
+   */
+  onBrushYChange($event) {
+    console.log('>>> onBrushYChange >>>');
+    console.log($event);
+    this._yBrushPosition = $event;
+    this._yAxes.slice();
   }
 
   onSelectAxis($axis) {

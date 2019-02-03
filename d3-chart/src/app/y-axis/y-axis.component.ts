@@ -23,8 +23,10 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
    */
   _chartDimensions: Dimensions;
   _yAxisConfig: Axis;
+  _originalYAxisConfig: Axis;
   _data: Series;
   _autoScale: boolean;
+  _brushPosition: number[];
 
   @Input()
   axisNumber: number;
@@ -36,6 +38,9 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
    */
   @Input()
   data: Series;
+
+  @Input()
+  brushPosition: number[];
 
   @Output()
   functionChange: EventEmitter<any> = new EventEmitter();
@@ -49,6 +54,7 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
     this._autoScale = this.autoScale;
     this._chartDimensions = this.chartDimensions;
     this._yAxisConfig = this.yAxisConfig;
+    this._brushPosition = this.brushPosition;
     this.updateAxis();
   }
 
@@ -65,12 +71,18 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
     if (changes.autoScale) {
       this._autoScale = changes.autoScale.currentValue;
     }
+    if (changes.brushPosition) {
+      this._brushPosition = changes.brushPosition.currentValue;
+    }
+    if (!this._originalYAxisConfig && this._yAxisConfig.function) {
+      this._originalYAxisConfig = this._yAxisConfig;
+    }
     this.updateAxis();
   }
 
   updateAxis() {
     if (this._chartDimensions && this._yAxisConfig) {
-      // console.log('Updating yAxis ' + this.axisNumber);
+      console.log('Updating yAxis ' + this.axisNumber);
       // console.log([this._yAxisConfig.min, this._yAxisConfig.max]);
 
       this.y = d3Scale
@@ -78,13 +90,28 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
         .range([this._chartDimensions.height - this._chartDimensions.margins.bottom
           , this._chartDimensions.margins.bottom]);
 
-      if (this._autoScale) {
+      if (this._autoScale && !this._brushPosition) {
+
         const boundCurves: number[] = [].concat(
           this._data.series
             .filter(s => s.header.axis === this.axisNumber)
             .map(s => s.values.map(t => t.y))
         )[0];
         this.y.domain([Math.min(...boundCurves), Math.max(...boundCurves)]);
+
+      } else if (this._autoScale && this._brushPosition) {
+
+        console.log('Updating axis from brush positions : ' + this._brushPosition);
+
+        console.log([
+          this._originalYAxisConfig.function.invert(Math.max(...this._brushPosition)),
+          this._originalYAxisConfig.function.invert(Math.min(...this._brushPosition))
+        ]);
+        this.y.domain([
+          this._originalYAxisConfig.function.invert(Math.max(...this._brushPosition)),
+          this._originalYAxisConfig.function.invert(Math.min(...this._brushPosition))
+        ]);
+
       } else {
         this.y.domain([this._yAxisConfig.min, this._yAxisConfig.max]);
       }
@@ -92,6 +119,7 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
       this._yAxisConfig.function = this.y;
       this.buildAxis();
       this._yAxisConfig = Object.assign({}, this._yAxisConfig);
+      this.functionChange.emit(this._yAxisConfig);
     }
   }
 
