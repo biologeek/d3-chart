@@ -6,7 +6,7 @@ import { ChartConfiguration, Series, Dimensions, Axis, AutoScale } from '../mode
 
 /**
  * Represents a chart. Here are set up chart dimensions and margins from the configuration injected by caller.
- * Changes from components that trigger other components of the chart are handled here (eg brush modification, ...) 
+ * Changes from components that trigger other components of the chart are handled here (eg brush modification, ...)
  */
 @Component({
   selector: 'app-chart',
@@ -46,6 +46,11 @@ export class ChartComponent implements OnInit, OnChanges {
    */
   @Input()
   autoScale: AutoScale;
+
+
+  @Output()
+  selectAbscissa: EventEmitter<any> = new EventEmitter();
+
 
   /**
    * Internal implementations
@@ -137,5 +142,42 @@ export class ChartComponent implements OnInit, OnChanges {
 
   onSelectAxis($axis) {
     this._selectedYAxis = $axis;
+  }
+
+  /**
+   * Event triggered when user clicks on a curve data dot.
+   * Dot components propagates an event containing abscissa value.
+   *
+   * Thus user needs to know to which values this abscissa refers to.
+   *
+   * This method finds serie ID and Y value for each serie in _data
+   *
+   * @param $event selected abscissa value
+   */
+  onSelectAbscissa($event) {
+    console.log('!!! Intercepted onSelectAbscissa event');
+    // console.log($event);
+    // console.log(this._data.series.map(serie => {
+    //   const filtered = serie.values.filter(t => t.x.getTime() === $event.getTime());
+    //   if (filtered[0]) {
+    //     return {
+    //       id: serie.header.id,
+    //       y: filtered[0].y
+    //     };
+    //   }
+    // }));
+    this.selectAbscissa.emit(
+      this._data.series.map(
+        serie => {
+          const filtered = serie.values.filter(t => t.x.getTime() === $event.getTime());
+          if (filtered[0]) {
+            return {
+              id: serie.header.id,
+              y: filtered[0].y
+            };
+          }
+        }
+      )
+    );
   }
 }

@@ -1,4 +1,4 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
-  <app-chart [dimensions]="chartConfig.dimensions" [yAxes]="chartConfig.yAxes" [xAxis]="chartConfig.xAxis" [data]="chartData" ></app-chart>
+  <app-chart (selectAbscissa)="selectAbscissa($event)" [dimensions]="chartConfig.dimensions" [yAxes]="chartConfig.yAxes" [xAxis]="chartConfig.xAxis" [data]="chartData" ></app-chart>
 </div>

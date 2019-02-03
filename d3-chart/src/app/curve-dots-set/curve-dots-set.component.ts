@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChange, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Serie, Axis, SerieValue } from '../model/chart-params';
 import * as d3Selection from 'd3-selection';
+import * as d3Shape from 'd3-shape';
 import * as d3TimeFormat from 'd3-time-format';
 import * as d3Transition from 'd3-transition';
 
@@ -23,6 +24,7 @@ import * as d3Transition from 'd3-transition';
   (click)='onClickDot(i)'
   (mouseover)="onMouseOverDot(i, $event)"
   (mouseleave)="onMouseLeave()"
+  (click)="onSelectDot(i,$event)"
   ></svg:circle>`,
   styleUrls: ['./curve-dots-set.component.css']
 })
@@ -38,10 +40,15 @@ export class CurveDotsSetComponent implements OnChanges {
   @Input()
   tooltip: string;
 
+  @Output()
+  selectAbscissa: EventEmitter<number> = new EventEmitter();
+
   _data: Serie;
   _xAxis: Axis;
   _yAxis: Axis;
   _tooltip: string;
+
+  ABSCISSA_LINE_CLASS_NAME = 'dot-selection-abscissa';
 
 
 
@@ -117,6 +124,74 @@ export class CurveDotsSetComponent implements OnChanges {
     Validité : <b>${d.dotConfigData.validity ? d.dotConfigData.validity.label : 'ø'} </b><br/>
     Reconstitution : <b>${d.dotConfigData.reconstitution ? d.dotConfigData.reconstitution.label : 'ø'} </b> <br/>
     Cohérence : <b>${d.dotConfigData.coherence ? d.dotConfigData.coherence.label : 'ø'} </b>`);
+  }
+
+  /**
+   * When selecting dot, draw dashed vertical line at given abscissa
+   * @param i id of clicked dot
+   * @param $event event data
+   */
+  onSelectDot(i, $event) {
+
+    d3Selection.selectAll(`.${this.ABSCISSA_LINE_CLASS_NAME}`).remove();
+
+    console.log('>>> Intercepted dot click >>>');
+    const abscissa = this._data.values[i].x;
+    const line = d3Shape.line()
+      .x(() => {
+        // console.log('Calculated X position : ' + this._xAxis.function(abscissa));
+        return this._xAxis.function(abscissa);
+      })
+      .y((d) => {
+        // console.log('Calculated Y position for ' + d + ' : ' + this._yAxis.function(d));
+        return this._yAxis.function(d);
+      });
+
+
+    const chartG = d3Selection.select('#chart');
+
+    // console.log('>>> chartG : ');
+    // console.log(chartG);
+
+    // console.log('>>> line :');
+    // console.log(line);
+    // console.log('>>> abscissa :');
+    // console.log(abscissa);
+
+    // console.log('>>> min and max');
+    // console.log(this._getMinAndMaxValueForArray(this._data.values.map(d => d.y)));
+    chartG.append('path')//
+      .attr('class', this.ABSCISSA_LINE_CLASS_NAME)//
+      .datum(this._getMinAndMaxValueForArray(this._data.values.map(d => d.y)))
+      .attr('d', line)
+      .attr('stroke', 'black')
+      .attr('stroke-dasharray', '10 10')
+      .attr('stroke-width', 3);
+
+      this.selectAbscissa.emit(abscissa);
+  }
+
+
+  _getMinAndMaxValueForArray(arr: Array<number>) {
+    let min: number;
+    let max: number;
+
+    for (const val of arr) {
+      // console.log('----------------------');
+      // console.log('Min : ' + min);
+      // console.log('Max : ' + max);
+      // console.log('Val : ' + val);
+
+      if (!min) {
+        min = val;
+      }
+      if (!max) {
+        max = val;
+      }
+      min = val < min ? val : min;
+      max = val > max ? val : max;
+    }
+    return min && max ? [min, max] : [];
   }
 
 }

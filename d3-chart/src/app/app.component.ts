@@ -282,7 +282,12 @@ export class AppComponent implements OnInit {
       this.chartConfig = newConfig;
       console.log('Incrementing : i=' + i);
       i++;
-    }, 600);
+    }, 60000);
+  }
+
+
+  selectAbscissa($event) {
+    console.log('GOT ' + JSON.stringify($event));
   }
 
 }

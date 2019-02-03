@@ -12,10 +12,10 @@
       <g clip-path="url(#clip)" *ngFor="let curve of _data.series; let i = index" app-curve id="path-{{curve.header.id}}" [data]="curve"
         [xAxis]="_xAxis" [yAxis]="curve.y" [serie]="i">
       </g>
-      <g *ngFor="let curve of _data.series" clip-path="url(#clip)" app-curve-dots-set id="dot-set-{{curve.header.id}}" [data]="curve" [xAxis]="_xAxis"
+      <g *ngFor="let curve of _data.series" clip-path="url(#clip)" app-curve-dots-set (selectAbscissa)="onSelectAbscissa($event)" id="dot-set-{{curve.header.id}}" [data]="curve" [xAxis]="_xAxis"
         [yAxis]="curve.y"></g>
       </g>
       <g app-brush-x class="brush brush-x" (brushXChange)="onBrushXChange($event)" [xAxisConfig]="_xAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
-      <g *ngIf="_selectedYAxis" app-brush-y class="brush brush-y" (brushYChange)="onBrushYChange($event)" [yAxisConfig]="_selectedYAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
+      <g app-brush-y class="brush brush-y" (brushYChange)="onBrushYChange($event)" [yAxisConfig]="_selectedYAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
     </g>
 </svg>
