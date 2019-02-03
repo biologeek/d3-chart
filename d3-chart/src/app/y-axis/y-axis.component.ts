@@ -110,6 +110,7 @@ export class YAxisComponent implements OnChanges, OnDestroy, AfterViewInit {
       .attr('font-size', '1rem')
       .text(this._yAxisConfig.label);
   }
+
   ngOnDestroy() {
   }
 

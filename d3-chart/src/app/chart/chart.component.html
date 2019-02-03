@@ -16,6 +16,6 @@
         [yAxis]="curve.y"></g>
       </g>
       <g app-brush-x class="brush brush-x" (brushXChange)="onBrushXChange($event)" [xAxisConfig]="_xAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
-      <g app-brush-y class="brush brush-y" (brushYChange)="onBrushYChange($event)" [yAxisConfig]="_selectedYAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
+      <g app-brush-y *ngIf="false" class="brush brush-y" (brushYChange)="onBrushYChange($event)" [yAxisConfig]="_selectedYAxis" [data]="_data" [chartDimensions]="_dimensions"></g>
     </g>
 </svg>

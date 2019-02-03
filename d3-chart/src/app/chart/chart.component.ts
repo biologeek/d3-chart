@@ -134,8 +134,8 @@ export class ChartComponent implements OnInit, OnChanges {
   onBrushXChange($brushRange) {
     this._brushPosition = $brushRange;
     this._xAxis.updateOriginal = false;
-
-    console.log([this._xAxis.function(this._brushPosition[0]), this._xAxis.function(this._brushPosition[1])]);
+    console.log(this._brushPosition);
+    console.log([this._xAxis.function.invert(this._brushPosition[0]), this._xAxis.function.invert(this._brushPosition[1])]);
     // Change reference to trigger change event
     this._xAxis = Object.assign({}, this._xAxis);
   }

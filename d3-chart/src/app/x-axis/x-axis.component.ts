@@ -82,6 +82,8 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
 
     if (this._originalAxis.function) {
       this._originalAxis.function.domain(d3Array.extent([].concat(this._data.series.map(s => s.values.map(a => new Date(a.x))))[0]));
+    } else {
+      this._originalAxis.function = this._xAxisConfig.function;
     }
 
     const leftBound = this._chartDimensions.margins.left;
@@ -89,6 +91,9 @@ export class XAxisComponent implements /*OnInit, */OnChanges, OnDestroy {
     this.x = d3Scale.scaleTime()
       .range([leftBound, rightBound]);
 
+      /*
+       * If autoscale is on  
+       */
     if (this.autoScale && !(this._brushPosition && this._originalAxis.function
        /*&& (this._brushPosition[0] > leftBound || this._brushPosition[1] < rightBound)*/)) {
 
